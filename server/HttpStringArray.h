@@ -1,6 +1,8 @@
 #ifndef _HTTP_STRING_ARRAY_H
 #define _HTTP_STRING_ARRAY_H
 
+#define REALLOC_STEPS 4
+
 class HttpStringArray {
   private:
     int z_size = 0;
