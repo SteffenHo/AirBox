@@ -14,7 +14,7 @@
 class HttpRequest {
   public:
     char method;
-    HttpStringArray parameter;
+    HttpStringArray route;
 };
 
 #endif
