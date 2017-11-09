@@ -1,3 +1,4 @@
+#include <string.h>
 #include "HttpStringArray.h"
 
 void HttpStringArray::updateSize(int p_size) {
@@ -27,12 +28,17 @@ bool HttpStringArray::set(int index, char* data) {
     return false;
   }
 
-  this->data[index] = data;
+  int length = strlen(data);
+  char* copied_data = (char*) malloc((length + 1) * sizeof(char*));
+  strcpy(copied_data, data);
+
+  this->data[index] = copied_data;
 }
 
 void HttpStringArray::add(char* data) {
   this->updateSize(((this->size() / REALLOC_STEPS) * REALLOC_STEPS) + REALLOC_STEPS );
-  this->data[this->z_size++] = data;
+
+  this->set(this->z_size++, data);
 }
 
 void HttpStringArray::clear() {
