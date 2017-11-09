@@ -1,6 +1,8 @@
 #ifndef _HTTP_HELPER_H
 #define _HTTP_HELPER_H
 
+#include "HttpStringArray.h"
+
 
 #define HTTP_METHOD_UNKNOWN 0
 #define HTTP_METHOD_GET 1
@@ -10,35 +12,12 @@
 #define HTTP_METHOD_PATCH 5 
 #define HTTP_METHOD_OPTIONS 6
 
-struct http_request {
-  char method;
-};
+#define REALLOC_STEPS 4
 
-class http_string_array {
-  private:
-    int pSize = 0;
-    char** data;
-
+class HttpRequest {
   public:
-    int size() {
-      return this->pSize;
-    };
-  
-    char* get(int index) {
-      if(index > size()) {
-        return NULL;
-      }
-  
-      return this->data[index];
-    };
-
-    void set(int index, char* data) {
-      
-    };
-
-    void add(char* data) {
-      
-    };
+    char method;
+    HttpStringArray parameter;
 };
 
 #endif

@@ -1,6 +1,6 @@
 #include "http_helper.h"
 
-void parse_http_request(struct http_request &request, char* buffer, int &lineType) {
+void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
   Serial.println(buffer);
   Serial.println(lineType);
 
@@ -14,8 +14,10 @@ void parse_http_request(struct http_request &request, char* buffer, int &lineTyp
     //http_route_to_array(routeArray, p);
 
     int routeCount = string_utils_count_char(p, '/');
-    http_string_array routeArray;
-    routeArray.set(0, "Test");
+    //http_string_array routeArray;
+    request.parameter.add("Test1");
+    request.parameter.add("Test2");
+    request.parameter.add("Test3");
     //routeArray.get(0) = "test";
     //routeArray.get(1) = "hi";
     
@@ -26,6 +28,7 @@ void parse_http_request(struct http_request &request, char* buffer, int &lineTyp
 
     Serial.print("Method-Type: ");
     Serial.println((int) request.method);
+    Serial.println("Ended parsing line");
   } else if(lineType == 2) {
     
   }
@@ -57,7 +60,7 @@ void http_route_to_array(char* routeArray, char* buffer) {
   Serial.println((int) request.method);
 }
 
-void http_clear_request(struct http_request &request) {
+void http_clear_request(HttpRequest &request) {
   request.method = HTTP_METHOD_UNKNOWN;
 }
 
