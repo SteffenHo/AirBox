@@ -12,6 +12,12 @@ int string_utils_count_char(const char* charArray, char search) {
   return i;
 }
 
+void string_to_lower(char* dst, const char* src) {
+  while(*src) {
+    *dst++ = tolower(*src++);
+  }
+}
+
 void string_copy_header(char* new_string, const char* string) {
   int length = strlen(string);
   

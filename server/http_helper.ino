@@ -53,16 +53,14 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
 
 void http_route_to_array(HttpStringArray &routeArray, char* buffer) {
   char *p = strtok(buffer, "/");
-  int i=0;
 
   while (p != NULL)
   {
     url_decode(p, p);
+    string_to_lower(p, p);
     routeArray.add(p);
     p = strtok (NULL, "/");
   }
-
-  Serial.println("Parsed Route");
 }
 
 void http_clear_request(HttpRequest &request, int &p_line_type) {
