@@ -11,6 +11,8 @@ class HttpBody {
     bool write(char* buffer);
     void clear();
     const char* getRaw();
+    int getCurrentIndex();
+    int content_length = 0;
 };
 
 #endif

@@ -19,6 +19,12 @@ bool HttpBody::write(char* buffer) {
 
 void HttpBody::clear() {
   this->data[0] = 0;
+  this->data_index = 0;
+  this->content_length = 0;
+}
+
+int HttpBody::getCurrentIndex() {
+  return this->data_index;
 }
 
 const char* HttpBody::getRaw() {
