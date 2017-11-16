@@ -1,3 +1,5 @@
+#ifndef _AVEM_CONFIG_H
+#define _AVEM_CONFIG_H
 #include <ArduinoJson.h>
 
 class AvemConfig {
@@ -107,4 +109,5 @@ class AvemConfig {
     return root;
    }
 };
+#endif
 

@@ -1,4 +1,7 @@
+#ifndef _AVEM_H
+#define _AVEM_H
 #include "avemConfig.h"
+#define JSON_ARRAY_SIZE 200
 
 class Avem{
   private:
@@ -51,4 +54,5 @@ class Avem{
     }
 
 };
+#endif
 
