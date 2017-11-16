@@ -30,6 +30,14 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
   } else if(lineType == 1) {
     if(buffer[0] == CHAR_NEW_LINE) {
       request.headerReady = 1;
+
+      const char* content_length = request.header.get("content-length");
+      if(content_length && content_length[0] != '0') {
+        request.body.content_length = (int) strtol(content_length, (char **)NULL, 10);
+      } else {
+        request.ready = true;
+      }
+      
       lineType = 2;
       return;
     }
@@ -57,7 +65,9 @@ void http_route_to_array(HttpStringArray &routeArray, char* buffer) {
   Serial.println("Parsed Route");
 }
 
-void http_clear_request(HttpRequest &request) {
+void http_clear_request(HttpRequest &request, int &p_line_type) {
+  p_line_type = 0;
+  request.ready = false;
   request.method = HTTP_METHOD_UNKNOWN;
   request.route.clear();
   request.body.clear();

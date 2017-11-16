@@ -19,7 +19,8 @@ class HttpRequest {
     HttpStringArray route;
     HttpHeader header;
     HttpBody body;
-    char bodyReaded = 0;
+    char ready = 0;
+    char bodyReady = 0;
     char headerReady = 0;
 };
 
