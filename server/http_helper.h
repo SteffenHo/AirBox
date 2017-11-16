@@ -2,6 +2,8 @@
 #define _HTTP_HELPER_H
 
 #include "HttpStringArray.h"
+#include "HttpBody.h"
+#include "HttpHeader.h"
 
 #define HTTP_METHOD_UNKNOWN 0
 #define HTTP_METHOD_GET 1
@@ -15,6 +17,10 @@ class HttpRequest {
   public:
     char method;
     HttpStringArray route;
+    HttpHeader header;
+    HttpBody body;
+    char bodyReaded = 0;
+    char headerReady = 0;
 };
 
 #endif
