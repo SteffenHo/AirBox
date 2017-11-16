@@ -22,7 +22,7 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
     Serial.print("Route-Count: ");
     Serial.println(routeCount);
     Serial.print("Route: ");
-    Serial.println(p);
+    request.route.print();
 
     Serial.print("Method-Type: ");
     Serial.println((int) request.method);
