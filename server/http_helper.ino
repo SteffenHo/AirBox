@@ -99,3 +99,19 @@ char get_method_type(char* method_string) {
 
   return HTTP_METHOD_UNKNOWN;
 }
+
+const char* http_get_status_message(unsigned int status_code) {
+  switch(status_code) {
+    case 200:
+      return "OK";
+    case 400:
+      return "Bad Request";
+    case 404:
+      return "Not Found";
+    case 500:
+      return "Internal Server Error";
+    default:
+      return "Internal Server Error";
+  }
+}
+
