@@ -3,6 +3,7 @@
 #include "avem.h"
 #include <RCSwitch.h>
 #include "eepromHelper.h"
+#include "SDCardHelper.h"
 
 
 
@@ -16,6 +17,9 @@ void setup() {
   Serial.begin(9600);
   receiver.enableReceive(0);
   //readAvem();
+
+  //Check SD
+  initSD();
 }
 
 void loop() {
@@ -24,11 +28,13 @@ void loop() {
     if (receiver.available()) {
       //output(receiver.getReceivedValue(), receiver.getReceivedBitlength(), receiver.getReceivedDelay(), receiver.getReceivedRawdata(),receiver.getReceivedProtocol());
       AvemConfig av(receiver.getReceivedValue(), receiver.getReceivedBitlength(), receiver.getReceivedDelay(),receiver.getReceivedProtocol());
-      Avem a(1, "test", av, 2);
-      a.print();
-      String str = a.toJson();
-      Serial.print(str);
-      EEPROM_writeAnything(addr,str);
+      Avem a(2, "test", av, 2);
+      addAvemToDB(a);
+      readFile();
+      //a.print();
+      //String str = a.toJson();
+      //Serial.print(str);
+      
       
       receiver.resetAvailable();
       receiver_is_active = 0;
