@@ -16,6 +16,27 @@ void initSD(){
   }
 }
 
+String prepareAvemDate(int id, Avem element){
+  
+  //char retval[210];
+  String data;
+  data += id;
+  data += '|';
+  String json = element.toJson();
+  Serial.println("\nprintJson\n");
+  Serial.println(json);
+  int len = 0;
+  for(;json[len]; len++);
+  Serial.println(len);
+  //data += json;
+  //retval = data;
+  for(int i = 0; i<len; i++){
+    Serial.println(json[i]);
+    data +=  json[i];
+  }
+  Serial.println(data);
+  return data;
+}
 
 void addAvemToDB(Avem data){
   DB = SD.open(AVEMFILE, FILE_WRITE);
