@@ -10,6 +10,14 @@ const char* HttpHeader::get(const char* p_name) {
   return entries[index].getValue();
 }
 
+const HttpHeaderEntry* HttpHeader::get(int index) {
+  if(index < 0 || index >= MAX_HEADER_ENTRIES) {
+    return NULL;
+  }
+
+  return &entries[index];
+}
+
 int HttpHeader::getIndex(const char* p_name) {
   for(int i = 0; i < this->size; i++) {
     if(strcasecmp(p_name, entries[i].getName()) == 0) {
@@ -51,6 +59,10 @@ void HttpHeader::print() {
   Serial.println(']');
 }
 
+int HttpHeader::getSize() const {
+  return this->size;
+}
+
 HttpHeaderEntry::HttpHeaderEntry() {
   this->name[0] = 0;
   this->value[0] = 0;
@@ -81,11 +93,11 @@ int HttpHeaderEntry::set(const char* p_name, const char* p_value) {
   return 1;
 }
 
-const char* HttpHeaderEntry::getName() {
+const char* HttpHeaderEntry::getName() const {
   return this->name;
 }
 
-const char* HttpHeaderEntry::getValue() {
+const char* HttpHeaderEntry::getValue() const {
   return this->value;
 }
 

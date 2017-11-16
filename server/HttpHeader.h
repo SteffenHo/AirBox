@@ -10,8 +10,8 @@ class HttpHeaderEntry {
     HttpHeaderEntry();
     HttpHeaderEntry(const char* p_name, const char* p_value);
     int set(const char* p_name, const char* p_value);
-    const char* getValue();
-    const char* getName();
+    const char* getValue() const;
+    const char* getName() const;
     void print();
   private:
     char name[MAX_HEADER_KEY_LENGTH];
@@ -26,6 +26,8 @@ class HttpHeader {
     int getIndex(const char* p_name);
     void clear();
     void print();
+    int getSize() const;
+    const HttpHeaderEntry* get(int index);
   private:
     int size;
     HttpHeaderEntry entries[MAX_HEADER_ENTRIES];
