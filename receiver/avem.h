@@ -23,6 +23,7 @@ class Avem{
       //this->name[i++] = 0;
       this->config = p_config;
     }
+    int getId(){return id;}
 
     void print(){
       Serial.print("Id: ");
