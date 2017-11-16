@@ -1,9 +1,12 @@
 #include "http_helper.h"
+#include "HttpHeader.h"
+
+#define CHAR_NEW_LINE 13
+
+char* body_buffer;
+bool body_buffer_in_string;
 
 void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
-  Serial.println(buffer);
-  Serial.println(lineType);
-
   if(lineType == 0) {
     char *p = strtok(buffer, " "); // read http-method
     request.method = get_method_type(p);
@@ -14,7 +17,8 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
     http_route_to_array(request.route, p);
 
     int routeCount = string_utils_count_char(p, '/');
-    
+
+    lineType = 1;
     Serial.print("Route-Count: ");
     Serial.println(routeCount);
     Serial.print("Route: ");
@@ -23,11 +27,20 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
     Serial.print("Method-Type: ");
     Serial.println((int) request.method);
     Serial.println("Ended parsing line");
-  } else if(lineType == 2) {
-    
-  }
+  } else if(lineType == 1) {
+    if(buffer[0] == CHAR_NEW_LINE) {
+      request.headerReady = 1;
+      lineType = 2;
+      return;
+    }
 
-  lineType++;
+    char *p = strtok(buffer, ":");
+    char *p2 = strtok(NULL, ":");
+
+    request.header.set(p, p2);
+  } else if(lineType == 2) {
+    request.body.write(buffer);
+  }
 }
 
 void http_route_to_array(HttpStringArray &routeArray, char* buffer) {
@@ -47,6 +60,8 @@ void http_route_to_array(HttpStringArray &routeArray, char* buffer) {
 void http_clear_request(HttpRequest &request) {
   request.method = HTTP_METHOD_UNKNOWN;
   request.route.clear();
+  request.body.clear();
+  request.header.clear();
 }
 
 char get_method_type(char* method_string) {
@@ -76,4 +91,3 @@ char get_method_type(char* method_string) {
 
   return HTTP_METHOD_UNKNOWN;
 }
-
