@@ -44,10 +44,10 @@ class Avem{
       root["name"] = name;
       root["deviceId"] = device_id;
       JsonObject& t = config.toJson(root);
-      t.printTo(Serial);
-      String jsonStr;
-      root.printTo(jsonStr);
-      return jsonStr;
+      char jsonChar[JSON_ARRAY_SIZE];
+      t.printTo(jsonChar, sizeof(char)*JSON_ARRAY_SIZE);
+      return jsonChar;
     }
+
 };
 
