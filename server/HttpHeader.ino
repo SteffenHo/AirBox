@@ -45,7 +45,7 @@ int HttpHeader::set(const char* p_name, const char* p_value) {
 }
 
 int HttpHeader::set(const char* p_name, int p_value) {
-    char content_length[sizeof(int)+1];
+    char content_length[sizeof(int)*8 + 1];
     itoa(p_value, content_length, 10);
 
     this->set(p_name, content_length);
