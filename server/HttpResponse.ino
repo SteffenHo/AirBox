@@ -9,6 +9,7 @@ Serial.println("client send");
   client.println(http_get_status_message(p_response.statusCode));
 
   response.header.set("Content-Type", "application/json");
+  response.header.set("Content-Length", strlen(response.body));
   response.header.set("Connection", "close");
 
   // set headers
