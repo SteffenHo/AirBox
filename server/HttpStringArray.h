@@ -3,18 +3,14 @@
 
 #define REALLOC_STEPS 4
 
+template<int E, int L>
 class HttpStringArray {
   private:
-    int z_size = 0;
-    int array_size = 0;
-    char** data = NULL;
-
-    void updateSize(int p_size);
+    int curIndex = 0;
+    char data[E][L];
 
   public:
-    HttpStringArray(int p_size = 0);
-    ~HttpStringArray();
-    
+    HttpStringArray();
     char* get(int index);
     bool set(int index, char* data);
     void add(char* data);

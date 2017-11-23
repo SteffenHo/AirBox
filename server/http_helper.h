@@ -16,7 +16,7 @@
 class HttpRequest {
   public:
     char method;
-    HttpStringArray route;
+    HttpStringArray<10, 65> route;
     HttpHeader header;
     HttpBody body;
     char ready = 0;

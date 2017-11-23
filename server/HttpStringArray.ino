@@ -1,21 +1,20 @@
 #include <string.h>
 #include "HttpStringArray.h"
 
-void HttpStringArray::updateSize(int p_size) {
-  this->data = (char**) realloc(this->data, p_size * sizeof(char*));
-  this->array_size = p_size;
-}
 
-HttpStringArray::HttpStringArray(int p_size) {
+template<int E, int L>
+HttpStringArray<E, L>::HttpStringArray() {
   Serial.println("construct string_array");
-  this->updateSize(p_size);
 }
 
-int HttpStringArray::size() {
-  return this->z_size;
+
+template<int E, int L>
+int HttpStringArray<E, L>::size() {
+  return this->curIndex;
 }
 
-char* HttpStringArray::get(int index) {
+template<int E, int L>
+char* HttpStringArray<E, L>::get(int index) {
   if(index > size()) {
     return NULL;
   }
@@ -23,32 +22,34 @@ char* HttpStringArray::get(int index) {
   return this->data[index];
 }
 
-bool HttpStringArray::set(int index, char* data) {
+template<int E, int L>
+bool HttpStringArray<E, L>::set(int index, char* data) {
   if(index > this->size()) {
     return false;
   }
 
   int length = strlen(data);
-  char* copied_data = (char*) malloc((length + 1) * sizeof(char*));
-  strcpy(copied_data, data);
-
-  this->data[index] = copied_data;
+  
+  for(int i = 0; i <= length; i++) {
+    this->data[index][i] = data[i];
+  }
 }
 
-void HttpStringArray::add(char* data) {
-  this->updateSize(((this->size() / REALLOC_STEPS) * REALLOC_STEPS) + REALLOC_STEPS );
 
-  this->set(this->z_size++, data);
+template<int E, int L>
+void HttpStringArray<E, L>::add(char* data) {
+  this->set(this->curIndex++, data);
 }
 
-void HttpStringArray::clear() {
-  this->updateSize(0);
-  this->z_size = 0;
+template<int E, int L>
+void HttpStringArray<E, L>::clear() {
+  this->curIndex = 0;
 }
 
-void HttpStringArray::print() {
+template<int E, int L>
+void HttpStringArray<E, L>::print() {
   Serial.print("[");
-
+  
   for(int i = 0, z = this->size(); i < z; i++) {
     Serial.print(this->get(i));
 
@@ -58,10 +59,6 @@ void HttpStringArray::print() {
   }
   
   Serial.println("]");
-}
-
-HttpStringArray::~HttpStringArray() {
-  Serial.println("destruct string_array");
 }
 
 
