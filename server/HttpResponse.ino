@@ -1,20 +1,20 @@
 #include "HttpResponse.h"
 
-void HttpResponse::send(WiFiClient &client, HttpResponse &p_response) {
-Serial.println("client send");
+void HttpResponse::send(WiFiClient &client) {
+  Serial.println("client send");
   // set HTTP-protocol, status-code and status-message
   client.print("HTTP/1.1 ");
-  client.print(p_response.statusCode);
+  client.print(this->statusCode);
   client.print(' ');
   client.println(http_get_status_message(p_response.statusCode));
 
-  response.header.set("Content-Type", "application/json");
-  response.header.set("Content-Length", strlen(response.body));
-  response.header.set("Connection", "close");
+  this->header.set("Content-Type", "application/json");
+  this->header.set("Content-Length", strlen(this->body));
+  this->header.set("Connection", "close");
 
   // set headers
   for(int i = 0, j = response.header.getSize(); i < j; i++) {
-    const HttpHeaderEntry* entry = response.header.get(i);
+    const HttpHeaderEntry* entry = this->header.get(i);
     client.print(entry->getName());
     client.print(": ");
     client.println(entry->getValue());
@@ -22,8 +22,8 @@ Serial.println("client send");
 
   // start body
   client.println();
-
-  client.println(response.body);
+  
+  client.println(this->body);
 
 /*
   client.println("<!DOCTYPE HTML><html><head>");

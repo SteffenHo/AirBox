@@ -11,7 +11,7 @@ class HttpResponse {
     HttpHeader header;
     char body[MAX_RESPONSE_BODY_SIZE];
     char ready = 0;
-    void send(WiFiClient &client, HttpResponse &p_response);
+    void send(WiFiClient &client);
     void clear();
 };
 
