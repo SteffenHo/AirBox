@@ -10,7 +10,7 @@
 #define HTTP_METHOD_POST 2
 #define HTTP_METHOD_DELETE 3
 #define HTTP_METHOD_PUT 4
-#define HTTP_METHOD_PATCH 5 
+#define HTTP_METHOD_PATCH 5
 #define HTTP_METHOD_OPTIONS 6
 
 class HttpRequest {
