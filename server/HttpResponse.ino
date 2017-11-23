@@ -38,6 +38,7 @@ void HttpResponse::send(WiFiClient &client) {
 void HttpResponse::clear() {
   this->ready = 0;
   this->header.clear();
+  this->body[0] = 0;
   this->statusCode = 500;
 }
 
