@@ -22,6 +22,7 @@ class HttpHeaderEntry {
 class HttpHeader {
   public:
     int set(const char* p_name, const char* p_value);
+    int set(const char* p_name, int p_value);
     const char* get(const char* p_name);
     int getIndex(const char* p_name);
     void clear();
