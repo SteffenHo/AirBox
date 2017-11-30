@@ -12,9 +12,11 @@ typedef void (*http_route_callback)(HttpRequest &request, HttpResponse &response
 class HttpRoute {
   private:
     HttpStringArray<HTTP_ROUTE_MAX_PARTS, HTTP_ROUTE_MAX_PART_SIZE> routeArray;
+    char method = HTTP_METHOD_GET; 
     http_route_callback callback = NULL;
   public:
     int setRoute(const char* route);
+    void setMethod(const char* method);
     void setCallback(http_route_callback callback);
     void call(HttpRequest &request, HttpResponse &response);
     bool validateAndCall(HttpRequest &request, HttpResponse &response);

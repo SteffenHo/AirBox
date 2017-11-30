@@ -69,7 +69,7 @@ void http_clear_request(HttpRequest &request, int &p_line_type) {
   request.params.clear();
 }
 
-char get_method_type(char* method_string) {
+char get_method_type(const char* method_string) {
   if(!strcmp(method_string, "GET")) {
     return HTTP_METHOD_GET;
   }

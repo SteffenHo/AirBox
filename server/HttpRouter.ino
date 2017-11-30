@@ -1,4 +1,5 @@
 #include "HttpRouter.h"
+#include "http_helper.h"
 
 int HttpRouter::add(HttpRoute &route) {
   if(this->routeIndex >= HTTP_ROUTER_MAX_ROUTES) {
@@ -45,6 +46,10 @@ bool HttpRoute::validateAndCall(HttpRequest &request, HttpResponse &response) {
   if(route_size > request.route.size()) {
     return 0;
   }
+
+  if(request.method != this->method) {
+    return 0;
+  }
     
   for(int i = 0; i < route_size; i++) {
     if(this->routeArray.get(i)[0] == ':') {
@@ -72,6 +77,10 @@ bool HttpRoute::validateAndCall(HttpRequest &request, HttpResponse &response) {
   this->call(request, response);
 
   return 1;
+}
+
+void HttpRoute::setMethod(const char* method) {
+  this->method = get_method_type(method);
 }
 
 bool HttpRouter::process(HttpRequest &request, HttpResponse &response) {
