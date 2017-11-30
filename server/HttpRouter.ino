@@ -52,6 +52,11 @@ this->routeArray.print();
 Serial.println("-----------");
   
   for(int i = 0; i < route_size; i++) {
+    if(this->routeArray.get(i)[0] == ':') {
+      request.params.add(request.route.get(i));
+      continue;
+    }
+    
     if(strcmp(this->routeArray.get(i), request.route.get(i)) != 0) {
       return 0;
     }

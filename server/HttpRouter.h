@@ -5,8 +5,6 @@
 #define _HTTP_ROUTER_H
 
 #define HTTP_ROUTER_MAX_ROUTES 10
-#define HTTP_ROUTE_MAX_PARTS 10
-#define HTTP_ROUTE_MAX_PART_SIZE 65
 #define HTTP_ROUTER_ROUTE_BUFFER 256
 
 typedef void (*http_route_callback)(HttpRequest &request, HttpResponse &response);

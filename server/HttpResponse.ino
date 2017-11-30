@@ -6,7 +6,7 @@ void HttpResponse::send(WiFiClient &client) {
   client.print("HTTP/1.1 ");
   client.print(this->statusCode);
   client.print(' ');
-  client.println(http_get_status_message(p_response.statusCode));
+  client.println(http_get_status_message(this->statusCode));
 
   this->header.set("Content-Type", "application/json");
   this->header.set("Content-Length", strlen(this->body));

@@ -13,10 +13,14 @@
 #define HTTP_METHOD_PATCH 5
 #define HTTP_METHOD_OPTIONS 6
 
+#define HTTP_ROUTE_MAX_PARTS 5
+#define HTTP_ROUTE_MAX_PART_SIZE 65
+
 class HttpRequest {
   public:
     char method;
-    HttpStringArray<10, 65> route;
+    HttpStringArray<HTTP_ROUTE_MAX_PARTS, HTTP_ROUTE_MAX_PART_SIZE> route;
+    HttpStringArray<HTTP_ROUTE_MAX_PARTS, HTTP_ROUTE_MAX_PART_SIZE> params;
     HttpHeader header;
     HttpBody body;
     char ready = 0;
