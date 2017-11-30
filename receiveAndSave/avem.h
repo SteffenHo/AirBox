@@ -45,8 +45,11 @@ class Avem{
     
    }*/
     int getId() const {return id;}
+    int getProtocol() const { return config.protocol;};
+    int getPulseLength() const { return config.pulse_length;};
+    char* getTriState() const { return config.getTriState();};
 
-    void print(){
+    void print() const{
       Serial.print("Id: ");
       Serial.print(id);
       Serial.print("\nName: ");
