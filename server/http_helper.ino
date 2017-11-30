@@ -19,14 +19,6 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
     int routeCount = string_utils_count_char(p, '/');
 
     lineType = 1;
-    Serial.print("Route-Count: ");
-    Serial.println(routeCount);
-    Serial.print("Route: ");
-    request.route.print();
-
-    Serial.print("Method-Type: ");
-    Serial.println((int) request.method);
-    Serial.println("Ended parsing line");
   } else if(lineType == 1) {
     if(buffer[0] == CHAR_NEW_LINE) {
       request.headerReady = 1;
@@ -74,6 +66,7 @@ void http_clear_request(HttpRequest &request, int &p_line_type) {
   request.route.clear();
   request.body.clear();
   request.header.clear();
+  request.params.clear();
 }
 
 char get_method_type(char* method_string) {

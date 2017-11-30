@@ -10,7 +10,6 @@ class HttpStringArray {
     char data[E][L];
 
   public:
-    HttpStringArray();
     char* get(int index);
     bool set(int index, char* data);
     void add(char* data);

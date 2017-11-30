@@ -1,7 +1,6 @@
 #include "HttpResponse.h"
 
 void HttpResponse::send(WiFiClient &client) {
-  Serial.println("client send");
   // set HTTP-protocol, status-code and status-message
   client.print("HTTP/1.1 ");
   client.print(this->statusCode);

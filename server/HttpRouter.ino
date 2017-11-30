@@ -45,12 +45,7 @@ bool HttpRoute::validateAndCall(HttpRequest &request, HttpResponse &response) {
   if(route_size > request.route.size()) {
     return 0;
   }
-
-Serial.println("process value");
-this->routeArray.print();
-  request.route.print();
-Serial.println("-----------");
-  
+    
   for(int i = 0; i < route_size; i++) {
     if(this->routeArray.get(i)[0] == ':') {
       request.params.add(request.route.get(i));
@@ -62,9 +57,6 @@ Serial.println("-----------");
     
     int requestRouteLength = strlen(requestRoute);
     int routeLength = strlen(route);
-
-    Serial.println(requestRoute);
-    Serial.println(route);
     
     if(requestRouteLength != routeLength) {
       return 0;

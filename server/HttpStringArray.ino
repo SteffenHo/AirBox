@@ -1,13 +1,6 @@
 #include <string.h>
 #include "HttpStringArray.h"
 
-
-template<int E, int L>
-HttpStringArray<E, L>::HttpStringArray() {
-  Serial.println("construct string_array");
-}
-
-
 template<int E, int L>
 int HttpStringArray<E, L>::size() {
   return this->curIndex;
@@ -24,7 +17,7 @@ char* HttpStringArray<E, L>::get(int index) {
 
 template<int E, int L>
 bool HttpStringArray<E, L>::set(int index, char* data) {
-  if(index > this->size()) {
+  if(index > this->size() || index >= E) {
     return false;
   }
 
@@ -33,12 +26,16 @@ bool HttpStringArray<E, L>::set(int index, char* data) {
   for(int i = 0; i <= length; i++) {
     this->data[index][i] = data[i];
   }
+
+  return true;
 }
 
 
 template<int E, int L>
 void HttpStringArray<E, L>::add(char* data) {
-  this->set(this->curIndex++, data);
+  if(this->set(this->curIndex, data)) {
+    this->curIndex++;
+  }
 }
 
 template<int E, int L>
