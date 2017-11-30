@@ -32,7 +32,7 @@ class AvemConfig {
       protocol = obj.protocol;
     }*/
 
-    char* bin2tristate(const char* bin) {
+    char* bin2tristate(const char* bin) const {
       static char returnValue[50];
       int pos = 0;
       int pos2 = 0;
@@ -53,7 +53,7 @@ class AvemConfig {
       return returnValue;
     }
 
-    char* dec2binWzerofill(unsigned long Dec, unsigned int bitLength) {
+    char* dec2binWzerofill(unsigned long Dec, unsigned int bitLength) const {
         static char bin[64]; 
         unsigned int i=0;
       
@@ -74,7 +74,7 @@ class AvemConfig {
         return bin;
       }
 
-    void print(){
+    void print() const{
       if (decimal == 0) {
         Serial.print("Unknown encoding.");
         Serial.print(decimal);
