@@ -60,6 +60,25 @@ int getMainId(){
     return -1;
   }
 }
+void addAvemToDB(const char* string){
+  Serial.println("save to DB");
+ // Serial.println(string);
+
+  DB = SD.open(DB_FILE_NAME, FILE_WRITE);
+
+  // if the file opened okay, write to it:
+  if (DB) {     
+    Serial.println(string);
+    DB.println(string);
+    // close the file:
+    DB.close();
+  } else {
+    // if the file didn't open, print an error:
+    Serial.println("error opening ");
+
+  }
+}
+
 void sendAvem(const Avem &av){
   sender.enableTransmit(D2);  // An Pin 3
 

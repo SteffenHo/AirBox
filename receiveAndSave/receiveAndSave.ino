@@ -23,6 +23,21 @@ void loop() {
     AvemConfig av(receiver.getReceivedValue(), receiver.getReceivedBitlength(), receiver.getReceivedDelay(),receiver.getReceivedProtocol());
     Avem a(2, "test", av, 2);
     createAvemString(a);
+    if(receiverIsActive && !isProcessingTask){
+      isProcessingTask = true;
+      //output(mySwitch.getReceivedValue(), mySwitch.getReceivedBitlength(), mySwitch.getReceivedDelay(), mySwitch.getReceivedRawdata(),mySwitch.getReceivedProtocol());
+      if(mainId >0){
+        mainId++;
+        AvemConfig av(receiver.getReceivedValue(), receiver.getReceivedBitlength(), receiver.getReceivedDelay(),receiver.getReceivedProtocol());
+        Avem a(mainId, "test", av, 2);
+         createAvemString(a);
+      }
+      else{
+        Serial.println("error Id to small");
+      }
+     
+      isProcessingTask = false;
+    }
     receiver.resetAvailable();
   }
 }
