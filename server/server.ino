@@ -127,6 +127,7 @@ void process_hi_var_2(HttpRequest &request, HttpResponse &response) {
   root.printTo(response.body);
 
   response.statusCode = 200;
+  response.end();
 }
 
 void loop()
@@ -178,7 +179,10 @@ void loop()
 }
 
 void process_request(HttpRequest &request, HttpResponse &response) {
-  router.process(request, response);
+  if(!router.process(request, response)) {
+    response.statusCode = 404;
+    response.end();
+  }
 
   if(request.ready) {
     Serial.println("---------- REQUEST ----------");
