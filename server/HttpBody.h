@@ -1,8 +1,6 @@
 #ifndef _HTTP_BODY_H
 #define _HTTP_BODY_H
 
-#define MAX_BODY_SIZE 2024
-
 class HttpBody {
   private:
     char data[MAX_BODY_SIZE] = "";

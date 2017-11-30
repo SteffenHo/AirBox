@@ -3,9 +3,6 @@
 
 #include "HttpHeader.h"
 
-#define RESPONSE_DEFAULT_STATUS_CODE 500
-#define MAX_RESPONSE_BODY_SIZE 2048
-
 class HttpResponse {
   protected:
     bool ready = false;

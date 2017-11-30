@@ -1,10 +1,6 @@
 #ifndef _HTTP_HEADER_H
 #define _HTTP_HEADER_H
 
-#define MAX_HEADER_ENTRIES 25
-#define MAX_HEADER_KEY_LENGTH 64
-#define MAX_HEADER_VALUE_LENGTH 512
-
 class HttpHeaderEntry {
   public:
     HttpHeaderEntry();
