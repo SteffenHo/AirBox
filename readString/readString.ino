@@ -25,18 +25,19 @@ File DB;
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+ serialEvent();
 }
 
 void serialEvent() {
-  
-  char ch = Serial.read();
-  if(ch == 119){ //w
-    //createAvemString();
-  }
-  else{
-    Serial.println("read");
-    readFile();
+  if(Serial.available()) {
+    char ch = Serial.read();
+    if(ch == 119){ //w
+      //createAvemString();
+    }
+    else{
+      Serial.println("read");
+      readFile();
+    }
   }
 }
 void readFile(){
