@@ -14,7 +14,7 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
     p = strtok(NULL, " "); // read route
 
     //char* routeArray = (char*) malloc(size_of(char*));
-    http_route_to_array(request.route, p);
+    http_route_to_array(request.route, p, false);
 
     int routeCount = string_utils_count_char(p, '/');
 
@@ -51,14 +51,17 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
   }
 }
 
-void http_route_to_array(HttpStringArray<HTTP_ROUTE_MAX_PARTS, HTTP_ROUTE_MAX_PART_SIZE> &routeArray, char* buffer) {
-  Serial.println(buffer);
+void http_route_to_array(HttpStringArray<HTTP_ROUTE_MAX_PARTS, HTTP_ROUTE_MAX_PART_SIZE> &routeArray, char* buffer, bool routeToLower) {
   char *p = strtok(buffer, "/");
 
   while (p != NULL)
   {
     url_decode(p, p);
-    string_to_lower(p, p);
+
+    if(routeToLower) {
+      string_to_lower(p, p);
+    }
+    
     routeArray.add(p);
     p = strtok (NULL, "/");
   }

@@ -56,9 +56,24 @@ Serial.println("-----------");
       request.params.add(request.route.get(i));
       continue;
     }
+
+    char* requestRoute = request.route.get(i);
+    char* route = this->routeArray.get(i);
     
-    if(strcmp(this->routeArray.get(i), request.route.get(i)) != 0) {
+    int requestRouteLength = strlen(requestRoute);
+    int routeLength = strlen(route);
+
+    Serial.println(requestRoute);
+    Serial.println(route);
+    
+    if(requestRouteLength != routeLength) {
       return 0;
+    }
+    
+    for(int j, z = requestRouteLength; j < z; j++) {
+      if(tolower(requestRoute[j]) != route[j]) {
+        return 0;
+      }
     }
   }
 
