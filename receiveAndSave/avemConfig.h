@@ -3,7 +3,7 @@
 #include <ArduinoJson.h>
 
 class AvemConfig {
-  private:
+  public:
     unsigned long decimal;
     unsigned int bit_length;
     unsigned int pulse_length;

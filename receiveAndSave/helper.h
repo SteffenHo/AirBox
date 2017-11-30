@@ -2,11 +2,8 @@
 #define _HELPER_H
 
 #include "avem.h"
+#include "SDCardHelper.h"
 
-void addAvemToDB(const char* string){
-  Serial.println("save to DB");
-  Serial.println(string);
-}
 
 char* createAvemString(const Avem &av ){
    char data[300];
@@ -34,6 +31,8 @@ char* createAvemString(const Avem &av ){
   addAvemToDB(data);
   return data;
 }
+
+
 
 
 

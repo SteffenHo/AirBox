@@ -4,10 +4,11 @@
 #define JSON_ARRAY_SIZE 200
 
 class Avem{
+  public:
+    AvemConfig config;
   private:
     int id;
     char name[20];
-    AvemConfig config;
     int device_id;
 
   public:
