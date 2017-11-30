@@ -13,6 +13,7 @@ class HttpResponse {
     char ready = 0;
     void send(WiFiClient &client);
     void clear();
+    void end();
 };
 
 #endif

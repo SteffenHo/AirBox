@@ -41,3 +41,7 @@ void HttpResponse::clear() {
   this->statusCode = 500;
 }
 
+void HttpResponse::end() {
+  this->ready = true;
+}
+

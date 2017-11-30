@@ -70,7 +70,7 @@ void setup()
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
-
+    
     server.begin();
     Serial.println("Web server started");
 }
@@ -89,6 +89,7 @@ void process_hi(HttpRequest &request, HttpResponse &response) {
   root.printTo(response.body);
 
   response.statusCode = 200;
+  response.end();
 }
 
 void process_hi_var(HttpRequest &request, HttpResponse &response) {
@@ -107,6 +108,7 @@ void process_hi_var(HttpRequest &request, HttpResponse &response) {
   root.printTo(response.body);
 
   response.statusCode = 200;
+  response.end();
 }
 
 void process_hi_var_2(HttpRequest &request, HttpResponse &response) {
@@ -176,9 +178,6 @@ void loop()
 }
 
 void process_request(HttpRequest &request, HttpResponse &response) {
-  response.ready = true;
-  Serial.println("Process request");
-
   router.process(request, response);
 
   if(request.ready) {
