@@ -13,7 +13,7 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-  if (!SD.begin(4 )) {
+  if (!SD.begin(D8 )) {
     Serial.println("initialization failed!");
     return;
   }
