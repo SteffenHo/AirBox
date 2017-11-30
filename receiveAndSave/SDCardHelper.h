@@ -60,6 +60,20 @@ int getMainId(){
     return -1;
   }
 }
+
+void initSD(){
+  Serial.println("begin");
+  for(int i = 0; i< 20; i++){
+    if (SD.begin(D8 )) {
+      Serial.println("initialization done.");
+      getMainId();
+      return;
+    }
+    Serial.println("initialization failed!");
+  }
+  
+}
+
 void addAvemToDB(const char* string){
   Serial.println("save to DB");
  // Serial.println(string);
