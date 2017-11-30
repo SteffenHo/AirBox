@@ -60,3 +60,83 @@ int getMainId(){
     return -1;
   }
 }
+void sendAvem(const Avem &av){
+  sender.enableTransmit(D2);  // An Pin 3
+
+  sender.setProtocol(av.getProtocol());
+  sender.setPulseLength(av.getPulseLength());
+   sender.sendTriState(av.getTriState());
+}
+
+bool setAvemFromFile(String fileString, int pId){
+  bool afterSeparator = false;
+  char idStr[ID_STR_SIZE];
+  int notAvemStrCount = 0;
+  
+  char avemStr[AVEM_STR_SIZE];
+  for(int i = 0; fileString[i]; i++){
+    if(!afterSeparator && fileString[i] == SEPARATOR){
+      afterSeparator = true;
+      notAvemStrCount++;
+      continue;
+    }
+    if(!afterSeparator){
+      idStr[i] = fileString[i];
+      idStr[(i+1)] = 0;
+      notAvemStrCount++;
+    }
+    else{
+      avemStr[(i-notAvemStrCount)] = fileString[i];
+      avemStr[((i+1)-notAvemStrCount)] = 0;
+    }
+  }
+  int id = atoi(idStr);
+  if(id!= pId){
+    return false;
+  }
+  Serial.println(id);
+  Serial.println(avemStr);
+  StaticJsonBuffer<200> jsonBuffer;
+  JsonObject& root = jsonBuffer.parseObject(avemStr);
+
+   
+   int jsonId = root["id"];
+   String jsonName = root["name"];
+   int jsonDeviceId =  root["deviceId"];
+   int jsonConfigDecimal =  root["config"]["decimal"];
+   int jsonConfigBitLength =  root["config"]["bitLength"];
+   int jsonConfigPulseLength = root["config"]["pulseLength"];
+   int jsonConfigProtocol = root["config"]["protocol"];
+
+   AvemConfig av_conf(jsonConfigDecimal, jsonConfigBitLength, jsonConfigPulseLength,jsonConfigProtocol);
+   Avem av(jsonDeviceId,"default", av_conf, jsonDeviceId);
+    
+  sendAvem(av);
+  return true;
+}
+
+bool readFile(int id){
+  DB = SD.open(DB_FILE_NAME);
+  if (DB) {
+    // read from the file until there's nothing else in it:
+    bool found = false;
+    while (DB.available() && !found) {
+      String buffer = DB.readStringUntil('\n');
+      //Serial.println(buffer);
+      //Serial.println("newLine");
+      found = setAvemFromFile(buffer, id);
+      //Serial.write(DB.read());
+    }
+    // close the file:
+    DB.close();
+  } else {
+    // if the file didn't open, 
+    Serial.print(" an error");
+    //Serial.println("error opening test.txt");
+  }
+  return true;
+}
+
+
+
+#endif
