@@ -27,9 +27,6 @@ HttpRequest request;
 HttpResponse response;
 HttpRouter router;
 
-const int led1 =  16;      // the number of the LED pin
-const int led2 =  17;      // the number of the LED pin
-
 void setup()
 {
     Serial.begin(115200);
@@ -37,12 +34,14 @@ void setup()
 
     // We start by connecting to a WiFi network
 
+    wifi_helper_init();
+
     Serial.println();
     Serial.println();
     Serial.print("Connecting to ");
     Serial.println(ssid);
 
-    WiFi.begin(ssid, password);
+    //WiFi.begin(ssid, password);
     tcpip_adapter_set_hostname(TCPIP_ADAPTER_IF_STA, "airbox");
     WiFi.setHostname("airbox");
 
