@@ -45,3 +45,7 @@ void HttpResponse::end() {
   this->ready = true;
 }
 
+bool HttpResponse::isReady() {
+  return this->ready;
+}
+

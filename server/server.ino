@@ -164,7 +164,7 @@ void loop()
         }
       }
 
-      if(response.ready) {
+      if(response.isReady()) {
         response.send(client);
         break;
       }
