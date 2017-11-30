@@ -109,6 +109,11 @@ class AvemConfig {
     //root.printTo(Serial);
     return root;
    }
+
+   char* getTriState() const {
+     const char* b = dec2binWzerofill(decimal, bit_length);
+     return bin2tristate( b);
+   }
 };
 #endif
 
