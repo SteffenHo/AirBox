@@ -47,4 +47,49 @@ void loop() {
     }
     receiver.resetAvailable();
   }
+  
+  
 }
+
+void serialEvent() {
+  if(Serial.available()) {
+    char ch = Serial.read();
+    Serial.println(ch);
+    if(!isProcessingTask){
+      if(ch == 115) //s
+      {
+        receiverIsActive = true;
+        sendIsActive = false;
+      }
+      else if(ch == 116) //t
+      {
+        receiverIsActive = false;
+      }
+      else if(ch == 109) //m
+      {
+        sendIsActive = true;
+        receiverIsActive = false;
+      }
+      else if(ch == 111) // o
+      {
+        sendIsActive = false;
+      }
+    }
+    
+    if(sendIsActive && !isProcessingTask){
+      isProcessingTask = true;
+      if(ch == 97) //a
+      { 
+        isProcessingTask = !readFile(2); //an
+      }
+      else if(ch == 98)//b 
+      { 
+       isProcessingTask = !readFile(3); //aus
+      }
+      isProcessingTask = false;
+    }
+      
+  }
+}
+
+
