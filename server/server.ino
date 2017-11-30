@@ -48,16 +48,19 @@ void setup()
 
     HttpRoute route;
     route.setRoute("/test me/hi/test");
+    route.setMethod("GET");
     route.setCallback(process_hi);
     router.add(route);
 
     HttpRoute route3;
     route3.setRoute("/test me/hi/:test/Moin");
+    route3.setMethod("GET");
     route3.setCallback(process_hi_var_2);
     router.add(route3);
 
     HttpRoute route2;
     route2.setRoute("/test me/hi/:test");
+    route2.setMethod("POST");
     route2.setCallback(process_hi_var);
     router.add(route2);
 
