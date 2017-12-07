@@ -3,7 +3,7 @@
 #define SEPARATOR '|'
 #define AVEM_STR_SIZE 300
 #define ID_STR_SIZE 10
-#define DB_FILE_NAME "AVEM30.TXT"
+#define DB_FILE_NAME "AVEM07.TXT"
 
 #include <SPI.h>
 #include <SD.h>
@@ -56,8 +56,9 @@ int getMainId(){
     DB.close();
     return mainId;
   } else {
-    Serial.print(" an error");
-    return -1;
+    Serial.print("cannot open DB");
+    mainId = 0; //gefähtlich
+    return 1;
   }
 }
 
