@@ -27,7 +27,7 @@ char* createAvemString(const Avem &av ){
   }
   data[i++] = 0;
   
-  //Serial.println(data);
+  Serial.println(data);
   addAvemToDB(data);
   return data;
 }

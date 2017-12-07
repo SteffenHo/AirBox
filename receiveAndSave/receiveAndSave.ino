@@ -11,9 +11,9 @@ bool sendIsActive =  false;
 bool isProcessingTask = false;
 void setup() {
   // put your setup code here, to run once:
-
+ delay(100);
  Serial.begin(9600);
- delay(20);
+ delay(100);
  receiver.enableReceive(D4);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
@@ -35,8 +35,8 @@ void loop() {
       //output(mySwitch.getReceivedValue(), mySwitch.getReceivedBitlength(), mySwitch.getReceivedDelay(), mySwitch.getReceivedRawdata(),mySwitch.getReceivedProtocol());
       if(mainId >0){
         mainId++;
-        AvemConfig av(receiver.getReceivedValue(), receiver.getReceivedBitlength(), receiver.getReceivedDelay(),receiver.getReceivedProtocol());
-        Avem a(mainId, "test", av, 2);
+        //AvemConfig av(receiver.getReceivedValue(), receiver.getReceivedBitlength(), receiver.getReceivedDelay(),receiver.getReceivedProtocol());
+        Avem a(mainId, "test",  2, receiver.getReceivedValue(), receiver.getReceivedBitlength(), receiver.getReceivedDelay(),receiver.getReceivedProtocol());
          createAvemString(a);
       }
       else{
@@ -74,6 +74,7 @@ void serialEvent() {
       {
         sendIsActive = false;
       }
+     
     }
     
     if(sendIsActive && !isProcessingTask){
