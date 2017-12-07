@@ -27,6 +27,22 @@ class Avem{
       this->name[i++] = 0;
       config = p_config;
     }
+    Avem(int p_id, const char* p_name,int p_device_id, unsigned long p_decimal, unsigned int p_bit_length, unsigned int p_pulse_length, unsigned int p_protocol){
+      id=p_id;
+      device_id = p_device_id;
+      int length = 0;
+      const char* add = p_name;
+      for(; add[length]; length++);
+      
+      //this->name = (char*)malloc((length+1)*sizeof(char));
+      int i = 0;
+      for(; i< length || i<19; i++){
+        name[i] = p_name[i];
+      }
+      this->name[i++] = 0;
+      config = AvemConfig(p_decimal, p_bit_length, p_pulse_length, p_protocol);
+        
+    }
 
    /*Avem(const Avem &av){
     Serial.println("Copy constructor allocating  Avem");
