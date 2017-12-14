@@ -6,8 +6,8 @@
 #include "http_helper.h"
 #include "HttpRouter.h"
 
-const char* ssid     = "";
-const char* password = "";
+ char* ssid     = "fh_ge_ahaus";
+ char* password = "8468841547122342";
 
 WiFiServer server(80);
 
@@ -23,8 +23,9 @@ const int led2 =  17;      // the number of the LED pin
 
 void setup()
 {
+  delay(100);
     Serial.begin(115200);
-    delay(10);
+    delay(100);
 
     // We start by connecting to a WiFi network
 
@@ -34,8 +35,11 @@ void setup()
     Serial.println(ssid);
 
     WiFi.begin(ssid, password);
+    
+#if BOARD == BOARD_ESP_32
     tcpip_adapter_set_hostname(TCPIP_ADAPTER_IF_STA, "airbox");
     WiFi.setHostname("airbox");
+#endif
 
     HttpRoute route;
     route.setRoute("/test me/hi/test");

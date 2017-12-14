@@ -3,6 +3,7 @@
 #include <RCSwitch.h>
 #include "helper.h"
 #include "SDCardHelper.h"
+#define RECEIVER_PIN 2
 
 RCSwitch receiver = RCSwitch();
 //RCSwitch sender = RCSwitch();
@@ -12,9 +13,9 @@ bool isProcessingTask = false;
 void setup() {
   // put your setup code here, to run once:
  delay(100);
- Serial.begin(9600);
+ Serial.begin(115200);
  delay(100);
- receiver.enableReceive(D4);
+ receiver.enableReceive(RECEIVER_PIN);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }

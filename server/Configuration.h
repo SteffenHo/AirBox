@@ -27,6 +27,11 @@
 #define HTTP_METHOD_PATCH 5
 #define HTTP_METHOD_OPTIONS 6
 
+// Board
+#define BOARD_ESP_8266 1
+#define BOARD_ESP_32 2
+#define BOARD BOARD_ESP_8266
+
 #define __DEV__
 
 #endif

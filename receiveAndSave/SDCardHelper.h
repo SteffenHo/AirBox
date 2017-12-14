@@ -3,10 +3,13 @@
 #define SEPARATOR '|'
 #define AVEM_STR_SIZE 300
 #define ID_STR_SIZE 10
-#define DB_FILE_NAME "AVEM07.TXT"
+#define DB_FILE_NAME "/AVEM07.TXT"
+#define SD_PIN 22
+#define SEND_PIN 16
 
-#include <SPI.h>
-#include <SD.h>
+#include "FS.h"
+#include "SD.h"
+#include "SPI.h"
 #include <RCSwitch.h>
 
 RCSwitch sender = RCSwitch();
@@ -65,8 +68,10 @@ int getMainId(){
 void initSD(){
   Serial.println("begin");
   for(int i = 0; i< 20; i++){
-    if (SD.begin(D8 )) {
+    if (SD.begin()) {
       Serial.println("initialization done.");
+      Serial.printf("Total space: %lluMB\n", SD.totalBytes() / (1024 * 1024));
+    Serial.printf("Used space: %lluMB\n", SD.usedBytes() / (1024 * 1024));
       getMainId();
       return;
     }
@@ -95,7 +100,7 @@ void addAvemToDB(const char* string){
 }
 
 void sendAvem(const Avem &av){
-  sender.enableTransmit(D2);  // An Pin 3
+  sender.enableTransmit(SEND_PIN);  // An Pin 3
 
   sender.setProtocol(av.getProtocol());
   sender.setPulseLength(av.getPulseLength());
