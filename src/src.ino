@@ -114,19 +114,22 @@ void save_config(HttpRequest &request, HttpResponse &response) {
 }
 
 void send_config(HttpRequest &request, HttpResponse &response) {
-  request.params.print();
+  receiverIsActive = false;
+  sendIsActive = true;
 
-  StaticJsonBuffer<200> jsonBuffer;
+  int id = atoi(request.params.get(0));
+  if(id <= 0) {
+    response.statusCode = 400;
+    response.end();
+    
+    return;
+  }
   
-  JsonObject& root = jsonBuffer.createObject();
-  root["sensor"] = "gps_var_moin";
-  root["time"] = 1351824120;
+  readFile(id);
+
+  receiverIsActive = false;
+  sendIsActive = false;
   
-  JsonArray& data = root.createNestedArray("data");
-  data.add(48.756080);
-  data.add(2.302038);
-  
-  root.printTo(response.body);
 
   response.statusCode = 200;
   response.end();
