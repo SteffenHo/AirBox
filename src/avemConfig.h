@@ -67,7 +67,7 @@ public:
     }
   
   void print() const{
-#ifdef DEV
+#ifdef __DEV__
     if (decimal == 0) {
       Serial.print("Unknown encoding.");
       Serial.print(decimal);

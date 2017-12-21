@@ -39,7 +39,7 @@ class Avem{
     char* getTriState() const { return config.getTriState();};
 
     void print() const{
-#ifdef DEV
+#ifdef __DEV__
       Serial.print("Id: ");
       Serial.print(id);
       Serial.print("\nName: ");

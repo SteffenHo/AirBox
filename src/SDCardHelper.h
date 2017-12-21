@@ -43,7 +43,7 @@ int getMainId(){
       String buffer = DB.readStringUntil('\n');
       int tempId = getIdFromString(buffer);
 
-#ifdef DEV
+#ifdef __DEV__
       Serial.println(tempId);
 #endif
       
@@ -64,7 +64,7 @@ int getMainId(){
 
 bool initSD(){
   if (SD.begin()) {
-#ifdef DEV
+#ifdef __DEV__
       Serial.println("initialization done.");
       Serial.printf("Total space: %lluMB\n", SD.totalBytes() / (1024 * 1024));
       Serial.printf("Used space: %lluMB\n", SD.usedBytes() / (1024 * 1024));
@@ -73,7 +73,7 @@ bool initSD(){
       return true;
     }
 
-#ifdef DEV
+#ifdef __DEV__
     Serial.println("initialization failed!");
 #endif
 
@@ -85,7 +85,7 @@ bool addAvemToDB(const char* string){
 
   // if the file opened okay, write to it:
   if (DB) {
-#ifdef DEV
+#ifdef __DEV__
     Serial.println(string);
 #endif
 
@@ -95,7 +95,7 @@ bool addAvemToDB(const char* string){
     return true;
   } else {
     // if the file didn't open, print an error:
-#ifdef DEV
+#ifdef __DEV__
     Serial.println("error opening ");
 #endif
 
@@ -169,7 +169,7 @@ bool readFile(int id){
     DB.close();
   } else {
     // if the file didn't open
-#ifdef DEV
+#ifdef __DEV__
     Serial.print("an error occured while reading file");
 #endif
 

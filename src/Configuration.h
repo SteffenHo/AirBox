@@ -2,8 +2,9 @@
 #define _CONFIGURATION_H
 
 // general
-#define SERVER_PORT 80
+#define __DEV__
 #define BAUD_RATE 115200
+#define SERVER_PORT 80
 
 // Pinout
 #define SD_PIN 22
@@ -51,8 +52,5 @@
 // avem
 #define AVEM_LENGTH 256
 #define AVEM_SERIALIZE_BUFFER_SIZE 2048
-
-#define __DEV__
-#define DEV
 
 #endif
