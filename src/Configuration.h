@@ -33,5 +33,6 @@
 #define BOARD BOARD_ESP_8266
 
 #define __DEV__
+#define DEV
 
 #endif

@@ -112,3 +112,77 @@ const char* http_get_status_message(unsigned int status_code) {
   }
 }
 
+void http_helper_loop() {
+  WiFiClient client = server.available();
+  if (client) {
+    memset(linebuf, 0, sizeof(linebuf));
+    
+    charcount = 0;
+    response.clear();
+    http_clear_request(request, line_type);
+    
+    while (client.connected()) {
+      if (client.available()) {
+        char c = client.read();
+        linebuf[charcount] = c;
+        charcount++;
+
+        int requestEnded = (line_type > 1 && (request.body.getCurrentIndex() + charcount) >= request.body.content_length);
+        if(requestEnded) {
+          request.bodyReady = true;
+          request.ready = true;
+        }
+
+        if(c == '\n' || requestEnded) {
+          parse_http_request(request, linebuf, line_type);
+
+          if(request.ready) {
+            process_request(request, response);
+          }
+         
+          memset(linebuf, 0, sizeof(linebuf));
+          charcount=0;
+        }
+      }
+
+      if(response.isReady()) {
+        response.send(client);
+        break;
+      }
+    }
+    // give the web browser time to receive the data
+    delay(1);
+
+    // close the connection:
+    client.stop();
+  }
+}
+
+void process_request(HttpRequest &request, HttpResponse &response) {
+  if(!router.process(request, response)) {
+    response.statusCode = 404;
+    response.end();
+  }
+
+  if(request.ready) {
+    Serial.println("---------- REQUEST ----------");
+    
+    Serial.print("Route: ");
+    request.route.print();
+
+    Serial.print("Method-Type: ");
+    Serial.println((int) request.method);
+
+    Serial.println("Headers:");
+    request.header.print();
+
+    Serial.println("Body:");
+    if(request.bodyReady) {
+      Serial.println(request.body.getRaw());
+    } else {
+      Serial.println("-- no body --");
+    }
+  }
+}
+
+

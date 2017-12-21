@@ -6,6 +6,18 @@
 #include "http_helper.h"
 #include "HttpRouter.h"
 
+#include "avem.h"
+#include <RCSwitch.h>
+#include "helper.h"
+#include "SDCardHelper.h"
+#define RECEIVER_PIN 2
+
+RCSwitch receiver = RCSwitch();
+bool receiverIsActive = false;
+bool sendIsActive =  false;
+bool isProcessingTask = false;
+bool isSdInitialized = false;
+
  char* ssid     = "fh_ge_ahaus";
  char* password = "8468841547122342";
 
@@ -41,27 +53,27 @@ void setup()
     WiFi.setHostname("airbox");
 #endif
 
-    HttpRoute route;
-    route.setRoute("/test me/hi/test");
-    route.setMethod("GET");
-    route.setCallback(process_hi);
-    router.add(route);
+    HttpRoute deviceConfigRoute;
+    deviceConfigRoute.setRoute("/devices/configs");
+    deviceConfigRoute.setMethod("GET");
+    deviceConfigRoute.setCallback(get_configs);
+    router.add(deviceConfigRoute);
 
-    HttpRoute route3;
-    route3.setRoute("/test me/hi/:test/Moin");
-    route3.setMethod("GET");
-    route3.setCallback(process_hi_var_2);
-    router.add(route3);
-
-    HttpRoute route2;
-    route2.setRoute("/test me/hi/:test");
-    route2.setMethod("POST");
-    route2.setCallback(process_hi_var);
-    router.add(route2);
+    HttpRoute sendConfigRoute;
+    sendConfigRoute.setRoute("/devices/configs/:id/send");
+    sendConfigRoute.setMethod("POST");
+    sendConfigRoute.setCallback(send_config);
+    router.add(sendConfigRoute);
 
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
+    }
+
+    receiver.enableReceive(RECEIVER_PIN);
+    if(initSD()) {
+      isSdInitialized = true;
+      // ESP.restart();
     }
 
     Serial.println("");
@@ -73,7 +85,7 @@ void setup()
     Serial.println("Web server started");
 }
 
-void process_hi(HttpRequest &request, HttpResponse &response) {
+void get_configs(HttpRequest &request, HttpResponse &response) {
   StaticJsonBuffer<200> jsonBuffer;
   
   JsonObject& root = jsonBuffer.createObject();
@@ -90,26 +102,7 @@ void process_hi(HttpRequest &request, HttpResponse &response) {
   response.end();
 }
 
-void process_hi_var(HttpRequest &request, HttpResponse &response) {
-  request.params.print();
-
-  StaticJsonBuffer<200> jsonBuffer;
-  
-  JsonObject& root = jsonBuffer.createObject();
-  root["sensor"] = "gps_var";
-  root["time"] = 1351824120;
-  
-  JsonArray& data = root.createNestedArray("data");
-  data.add(48.756080);
-  data.add(2.302038);
-  
-  root.printTo(response.body);
-
-  response.statusCode = 200;
-  response.end();
-}
-
-void process_hi_var_2(HttpRequest &request, HttpResponse &response) {
+void send_config(HttpRequest &request, HttpResponse &response) {
   request.params.print();
 
   StaticJsonBuffer<200> jsonBuffer;
@@ -130,76 +123,78 @@ void process_hi_var_2(HttpRequest &request, HttpResponse &response) {
 
 void loop()
 {
-    // listen for incoming clients
-  WiFiClient client = server.available();
-  if (client) {
-    memset(linebuf, 0, sizeof(linebuf));
-    
-    charcount = 0;
-    response.clear();
-    http_clear_request(request, line_type);
-    
-    while (client.connected()) {
-      if (client.available()) {
-        char c = client.read();
-        linebuf[charcount] = c;
-        charcount++;
+  // listen for incoming clients
+  http_helper_loop();
 
-        int requestEnded = (line_type > 1 && (request.body.getCurrentIndex() + charcount) >= request.body.content_length);
-        if(requestEnded) {
-          request.bodyReady = true;
-          request.ready = true;
-        }
-
-        if(c == '\n' || requestEnded) {
-          parse_http_request(request, linebuf, line_type);
-
-          if(request.ready) {
-            process_request(request, response);
-          }
-         
-          memset(linebuf, 0, sizeof(linebuf));
-          charcount=0;
-        }
+#ifdef __DEV__
+  serialEvent();
+#endif
+  
+  if (receiver.available()) {
+    if(receiverIsActive && !isProcessingTask) {
+      isProcessingTask = true;
+      
+      if(mainId > 0) {
+        mainId++;
+        
+        Avem a(mainId, "test", 2,
+          receiver.getReceivedValue(),
+          receiver.getReceivedBitlength(),
+          receiver.getReceivedDelay(),
+          receiver.getReceivedProtocol()
+        );
+        
+        createAvemString(a);
+      } else {
+#ifdef __DEV__
+        Serial.println("error Id to small");
+#endif
       }
-
-      if(response.isReady()) {
-        response.send(client);
-        break;
-      }
+     
+      isProcessingTask = false;
     }
-    // give the web browser time to receive the data
-    delay(1);
-
-    // close the connection:
-    client.stop();
+    receiver.resetAvailable();
   }
 }
 
-void process_request(HttpRequest &request, HttpResponse &response) {
-  if(!router.process(request, response)) {
-    response.statusCode = 404;
-    response.end();
-  }
-
-  if(request.ready) {
-    Serial.println("---------- REQUEST ----------");
+#ifdef __DEV__
+void serialEvent() {
+  if(Serial.available()) {
+    char ch = Serial.read();
+    Serial.println(ch);
+    if(!isProcessingTask){
+      if(ch == 115) //s
+      {
+        receiverIsActive = true;
+        sendIsActive = false;
+      }
+      else if(ch == 116) //t
+      {
+        receiverIsActive = false;
+      }
+      else if(ch == 109) //m
+      {
+        sendIsActive = true;
+        receiverIsActive = false;
+      }
+      else if(ch == 111) // o
+      {
+        sendIsActive = false;
+      }
+    }
     
-    Serial.print("Route: ");
-    request.route.print();
-
-    Serial.print("Method-Type: ");
-    Serial.println((int) request.method);
-
-    Serial.println("Headers:");
-    request.header.print();
-
-    Serial.println("Body:");
-    if(request.bodyReady) {
-      Serial.println(request.body.getRaw());
-    } else {
-      Serial.println("-- no body --");
+    if(sendIsActive && !isProcessingTask) {
+      isProcessingTask = true;
+      if(ch == 97) //a
+      { 
+        isProcessingTask = !readFile(2); //an
+      }
+      else if(ch == 98)//b 
+      { 
+       isProcessingTask = !readFile(3); //aus
+      }
+      isProcessingTask = false;
     }
   }
 }
-
+#endif
