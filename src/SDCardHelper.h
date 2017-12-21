@@ -57,7 +57,7 @@ int getMainId(){
     return mainId;
   } else {
     Serial.print("cannot open DB");
-    mainId = 0; // danger!
+    mainId = 1; // danger!
     return 0;
   }
 }

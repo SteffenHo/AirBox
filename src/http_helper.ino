@@ -112,7 +112,7 @@ const char* http_get_status_message(unsigned int status_code) {
   }
 }
 
-void http_helper_loop() {
+void http_helper_loop(HttpRequest &request, HttpResponse &response, void(*callback)(HttpRequest&, HttpResponse&)) {
   WiFiClient client = server.available();
   if (client) {
     memset(linebuf, 0, sizeof(linebuf));
@@ -145,16 +145,14 @@ void http_helper_loop() {
         }
       }
 
+      callback(request, response);
+
       if(response.isReady()) {
         response.send(client);
+        
         break;
       }
     }
-    // give the web browser time to receive the data
-    delay(1);
-
-    // close the connection:
-    client.stop();
   }
 }
 

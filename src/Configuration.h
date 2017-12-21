@@ -50,7 +50,7 @@
 #define DB_FILE_NAME "/AVEM07.TXT"
 
 // avem
-#define AVEM_LENGTH 256
+#define AVEM_NAME_LENGTH 256
 #define AVEM_SERIALIZE_BUFFER_SIZE 2048
 
 #endif

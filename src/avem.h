@@ -8,7 +8,7 @@ class Avem{
     AvemConfig config;
   private:
     int id;
-    char name[AVEM_LENGTH];
+    char name[AVEM_NAME_LENGTH];
     int device_id;
 
   public:

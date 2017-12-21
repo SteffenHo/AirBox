@@ -26,6 +26,10 @@ void createAvemString(const Avem &av ){
     data[i] = str[k];
   }
   data[i++] = 0;
+
+#ifdef __DEV__
+  Serial.println(data);
+#endif
   
   addAvemToDB(data);
 }

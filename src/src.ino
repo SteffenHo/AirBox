@@ -49,17 +49,23 @@ void setup()
     WiFi.setHostname("airbox");
 #endif
 
+    HttpRoute sendConfigRoute;
+    sendConfigRoute.setRoute("/devices/configs/:id/send");
+    sendConfigRoute.setMethod("POST");
+    sendConfigRoute.setCallback(send_config);
+    router.add(sendConfigRoute);
+
     HttpRoute deviceConfigRoute;
     deviceConfigRoute.setRoute("/devices/configs");
     deviceConfigRoute.setMethod("GET");
     deviceConfigRoute.setCallback(get_configs);
     router.add(deviceConfigRoute);
 
-    HttpRoute sendConfigRoute;
-    sendConfigRoute.setRoute("/devices/configs/:id/send");
-    sendConfigRoute.setMethod("POST");
-    sendConfigRoute.setCallback(send_config);
-    router.add(sendConfigRoute);
+    HttpRoute saveConfigRoute;
+    saveConfigRoute.setRoute("/devices/configs");
+    saveConfigRoute.setMethod("POST");
+    saveConfigRoute.setCallback(save_config);
+    router.add(saveConfigRoute);
 
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
@@ -98,6 +104,15 @@ void get_configs(HttpRequest &request, HttpResponse &response) {
   response.end();
 }
 
+void save_config(HttpRequest &request, HttpResponse &response) {
+  receiverIsActive = true;
+  sendIsActive = false;
+
+  mainId = 1;
+  
+  response.statusCode = 200;
+}
+
 void send_config(HttpRequest &request, HttpResponse &response) {
   request.params.print();
 
@@ -117,11 +132,7 @@ void send_config(HttpRequest &request, HttpResponse &response) {
   response.end();
 }
 
-void loop()
-{
-  // listen for incoming clients
-  http_helper_loop();
-
+void client_loop(HttpRequest &request, HttpResponse &response) {
 #ifdef __DEV__
   serialEvent();
 #endif
@@ -133,7 +144,12 @@ void loop()
       if(mainId > 0) {
         mainId++;
         
-        Avem a(mainId, "test", 2,
+        StaticJsonBuffer<200> jsonBuffer;
+        JsonObject& requestBody = jsonBuffer.parseObject(request.body.getRaw(), MAX_BODY_SIZE);
+        
+        Avem a(mainId,
+          requestBody["name"],
+          requestBody["deviceId"],
           receiver.getReceivedValue(),
           receiver.getReceivedBitlength(),
           receiver.getReceivedDelay(),
@@ -141,6 +157,8 @@ void loop()
         );
         
         createAvemString(a);
+        
+        response.end();
       } else {
 #ifdef __DEV__
         Serial.println("error Id to small");
@@ -148,9 +166,16 @@ void loop()
       }
      
       isProcessingTask = false;
+      receiverIsActive = false;
     }
     receiver.resetAvailable();
   }
+}
+
+void loop()
+{
+  // listen for incoming clients
+  http_helper_loop(request, response, client_loop);
 }
 
 #ifdef __DEV__
