@@ -10,7 +10,6 @@
 #include <RCSwitch.h>
 #include "helper.h"
 #include "SDCardHelper.h"
-#define RECEIVER_PIN 2
 
 RCSwitch receiver = RCSwitch();
 bool receiverIsActive = false;
@@ -18,10 +17,10 @@ bool sendIsActive =  false;
 bool isProcessingTask = false;
 bool isSdInitialized = false;
 
- char* ssid     = "fh_ge_ahaus";
- char* password = "8468841547122342";
+char* ssid     = "fh_ge_ahaus";
+char* password = "8468841547122342";
 
-WiFiServer server(80);
+WiFiServer server(SERVER_PORT);
 
 char linebuf[1024];
 int charcount = 0;
@@ -30,13 +29,10 @@ HttpRequest request;
 HttpResponse response;
 HttpRouter router;
 
-const int led1 =  16;      // the number of the LED pin
-const int led2 =  17;      // the number of the LED pin
-
 void setup()
 {
   delay(100);
-    Serial.begin(115200);
+    Serial.begin(BAUD_RATE);
     delay(100);
 
     // We start by connecting to a WiFi network

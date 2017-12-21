@@ -1,19 +1,16 @@
 #ifndef _HELPER_H
 #define _HELPER_H
 
-#define AVEM_SERIALIZE_BUFFER_LENGTH 2048
-
 #include "avem.h"
 #include "SDCardHelper.h"
 
-
 void createAvemString(const Avem &av ){
-   char data[AVEM_SERIALIZE_BUFFER_LENGTH];
+   char data[AVEM_SERIALIZE_BUFFER_SIZE];
    char idStr[10];
    int i = 0;
 
-  char str[AVEM_SERIALIZE_BUFFER_LENGTH];
-  av.toJson(str, AVEM_SERIALIZE_BUFFER_LENGTH);
+  char str[AVEM_SERIALIZE_BUFFER_SIZE];
+  av.toJson(str, AVEM_SERIALIZE_BUFFER_SIZE);
   
   int jsonStrLen = strlen(str);
   itoa(av.getId(), idStr, 10);

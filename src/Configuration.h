@@ -1,6 +1,21 @@
 #ifndef _CONFIGURATION_H
 #define _CONFIGURATION_H
 
+// general
+#define SERVER_PORT 80
+#define BAUD_RATE 115200
+
+// Pinout
+#define SD_PIN 22
+#define SEND_PIN 16
+#define RECEIVER_PIN 2
+
+// Board
+#define BOARD_ESP_8266 1
+#define BOARD_ESP_32 2
+#define BOARD BOARD_ESP_32
+
+// server settings
 #define MAX_BODY_SIZE 2024
 
 #define MAX_HEADER_ENTRIES 25
@@ -27,10 +42,15 @@
 #define HTTP_METHOD_PATCH 5
 #define HTTP_METHOD_OPTIONS 6
 
-// Board
-#define BOARD_ESP_8266 1
-#define BOARD_ESP_32 2
-#define BOARD BOARD_ESP_8266
+// SD-card settings
+#define SEPARATOR '|'
+#define AVEM_STR_SIZE 300
+#define ID_STR_SIZE 10
+#define DB_FILE_NAME "/AVEM07.TXT"
+
+// avem
+#define AVEM_LENGTH 256
+#define AVEM_SERIALIZE_BUFFER_SIZE 2048
 
 #define __DEV__
 #define DEV

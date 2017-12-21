@@ -1,8 +1,6 @@
 #ifndef _AVEM_H
 #define _AVEM_H
 
-#define AVEM_LENGTH 256
-
 #include "avemConfig.h"
 
 class Avem{

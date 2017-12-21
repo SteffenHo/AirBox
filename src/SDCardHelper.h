@@ -1,13 +1,6 @@
 #ifndef _SD_CARD_HELPER_H
 #define _SD_CARD_HELPER_H
 
-#define SEPARATOR '|'
-#define AVEM_STR_SIZE 300
-#define ID_STR_SIZE 10
-#define DB_FILE_NAME "/AVEM07.TXT"
-#define SD_PIN 22
-#define SEND_PIN 16
-
 #include "FS.h"
 #include "SD.h"
 #include "SPI.h"
