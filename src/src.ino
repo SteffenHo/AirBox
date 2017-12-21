@@ -125,7 +125,15 @@ void send_config(HttpRequest &request, HttpResponse &response) {
     return;
   }
   
-  readFile(id);
+  const Avem& av = readFile(id);
+  if(av.isEmpty()) {
+    response.statusCode = 404;
+    response.end();
+    
+    return;
+  }
+
+  sendAvem(av);
 
   receiverIsActive = false;
   sendIsActive = false;
@@ -211,11 +219,11 @@ void serialEvent() {
       isProcessingTask = true;
       if(ch == 97) //a
       { 
-        isProcessingTask = !readFile(2); //an
+        //isProcessingTask = readFile(2); //an
       }
       else if(ch == 98)//b 
       { 
-       isProcessingTask = !readFile(3); //aus
+       //isProcessingTask = readFile(3); //aus
       }
       isProcessingTask = false;
     }

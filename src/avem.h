@@ -6,12 +6,17 @@
 class Avem{
   public:
     AvemConfig config;
+    static Avem EMPTY;
   private:
+    bool empty = false;
     int id;
     char name[AVEM_NAME_LENGTH];
     int device_id;
 
   public:
+    Avem() {
+      empty = true;
+    }
     Avem(int p_id, const char* p_name, int p_device_id){
       id=p_id;
       device_id = p_device_id;
@@ -37,6 +42,7 @@ class Avem{
     int getProtocol() const { return config.protocol;};
     int getPulseLength() const { return config.pulse_length;};
     char* getTriState() const { return config.getTriState();};
+    bool isEmpty() const {return empty;}
 
     void print() const{
 #ifdef __DEV__
@@ -64,5 +70,7 @@ class Avem{
     }
 
 };
+
+Avem Avem::EMPTY;
 
 #endif

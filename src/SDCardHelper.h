@@ -111,7 +111,7 @@ void sendAvem(const Avem &av){
   sender.sendTriState(av.getTriState());
 }
 
-bool setAvemFromFile(String fileString, int pId){
+const Avem& setAvemFromFile(String fileString, int pId){
   bool afterSeparator = false;
   char idStr[ID_STR_SIZE];
   int notAvemStrCount = 0;
@@ -134,8 +134,8 @@ bool setAvemFromFile(String fileString, int pId){
     }
   }
   int id = atoi(idStr);
-  if(id!= pId){
-    return false;
+  if(id != pId){
+    return Avem::EMPTY;
   }
   
   StaticJsonBuffer<200> jsonBuffer;
@@ -152,31 +152,34 @@ bool setAvemFromFile(String fileString, int pId){
   AvemConfig av_conf(jsonConfigDecimal, jsonConfigBitLength, jsonConfigPulseLength,jsonConfigProtocol);
   Avem av(jsonDeviceId,"default", av_conf, jsonDeviceId);
 
-  sendAvem(av);
-  return true;
+  //sendAvem(av);
+  return av;
 }
 
-bool readFile(int id){
+const Avem& readFile(int id){
   DB = SD.open(DB_FILE_NAME);
   if (DB) {
     // read from the file until there's nothing else in it:
-    bool found = false;
-    while (DB.available() && !found) {
+    
+    while (DB.available()) {
       String buffer = DB.readStringUntil('\n');
-      found = setAvemFromFile(buffer, id);
+      const Avem& found = setAvemFromFile(buffer, id);
+
+      if(found.isEmpty()) {
+        // close the file:
+        DB.close();
+  
+        return found;
+      }
     }
-    // close the file:
-    DB.close();
   } else {
     // if the file didn't open
 #ifdef __DEV__
     Serial.print("an error occured while reading file");
 #endif
-
-    return false;
   }
-  
-  return true;
+
+  return Avem::EMPTY;
 }
 
 
