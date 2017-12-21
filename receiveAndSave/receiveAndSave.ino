@@ -1,4 +1,4 @@
-
+#define DEV 1
 #include "avem.h"
 #include <RCSwitch.h>
 #include "helper.h"
@@ -6,10 +6,11 @@
 #define RECEIVER_PIN 2
 
 RCSwitch receiver = RCSwitch();
-//RCSwitch sender = RCSwitch();
 bool receiverIsActive = false;
 bool sendIsActive =  false;
 bool isProcessingTask = false;
+bool isSdInitialized = false;
+
 void setup() {
   // put your setup code here, to run once:
  delay(100);
@@ -20,38 +21,40 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-  initSD();
-  
+  if(initSD()) {
+    isSdInitialized = true;
+    // ESP.restart();
+  }
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  //Serial.println("z");
+#ifdef DEV
   serialEvent();
-  
+#endif
   
   if (receiver.available()) {
-    if(receiverIsActive && !isProcessingTask){
+    if(receiverIsActive && !isProcessingTask) {
       isProcessingTask = true;
-      //output(mySwitch.getReceivedValue(), mySwitch.getReceivedBitlength(), mySwitch.getReceivedDelay(), mySwitch.getReceivedRawdata(),mySwitch.getReceivedProtocol());
-      if(mainId >0){
+      
+      if(mainId > 0) {
         mainId++;
-        //AvemConfig av(receiver.getReceivedValue(), receiver.getReceivedBitlength(), receiver.getReceivedDelay(),receiver.getReceivedProtocol());
+        
         Avem a(mainId, "test",  2, receiver.getReceivedValue(), receiver.getReceivedBitlength(), receiver.getReceivedDelay(),receiver.getReceivedProtocol());
-         createAvemString(a);
-      }
-      else{
+        createAvemString(a);
+      } else {
+#ifdef DEV
         Serial.println("error Id to small");
+#endif
       }
      
       isProcessingTask = false;
     }
     receiver.resetAvailable();
   }
-  
-  
 }
 
+
+#ifdef DEV
 void serialEvent() {
   if(Serial.available()) {
     char ch = Serial.read();
@@ -75,10 +78,9 @@ void serialEvent() {
       {
         sendIsActive = false;
       }
-     
     }
     
-    if(sendIsActive && !isProcessingTask){
+    if(sendIsActive && !isProcessingTask) {
       isProcessingTask = true;
       if(ch == 97) //a
       { 
@@ -90,8 +92,7 @@ void serialEvent() {
       }
       isProcessingTask = false;
     }
-      
   }
 }
-
+#endif
 
