@@ -50,6 +50,8 @@ class Avem{
     int getProtocol() const { return config.protocol;};
     int getPulseLength() const { return config.pulse_length;};
     char* getTriState() const { return config.getTriState();};
+    int getBitLength() const { return config.getBitLength();};
+    long getDecimal() const { return config.getDecimal();};
     bool isEmpty() const {return empty;}
 
     void print() const{
