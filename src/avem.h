@@ -17,6 +17,14 @@ class Avem{
     Avem() {
       empty = true;
     }
+    Avem(const Avem &obj) {
+      Serial.println("copy avem");
+      this->config = obj.config;
+      this->empty = obj.empty;
+      this->id = obj.id;
+      this->device_id = obj.device_id;
+      strcpy(this->name, obj.name);
+    }
     Avem(int p_id, const char* p_name, int p_device_id){
       id=p_id;
       device_id = p_device_id;
