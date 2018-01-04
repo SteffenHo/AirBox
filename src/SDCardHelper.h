@@ -111,7 +111,7 @@ void sendAvem(const Avem &av){
   sender.sendTriState(av.getTriState());
 }
 
-const Avem& setAvemFromFile(String fileString, int pId){
+Avem setAvemFromFile(String fileString, int pId){
   bool afterSeparator = false;
   char idStr[ID_STR_SIZE];
   int notAvemStrCount = 0;
@@ -148,7 +148,7 @@ const Avem& setAvemFromFile(String fileString, int pId){
   int jsonConfigBitLength = root["config"]["bitLength"];
   int jsonConfigPulseLength = root["config"]["pulseLength"];
   int jsonConfigProtocol = root["config"]["protocol"];
-  
+
   AvemConfig av_conf(jsonConfigDecimal, jsonConfigBitLength, jsonConfigPulseLength,jsonConfigProtocol);
   Avem av(jsonDeviceId, jsonName.c_str(), av_conf, jsonDeviceId);
 
@@ -156,19 +156,59 @@ const Avem& setAvemFromFile(String fileString, int pId){
   return av;
 }
 
-const Avem& readFile(int id){
+bool readFileToString(char* body) {
   DB = SD.open(DB_FILE_NAME);
   if (DB) {
     // read from the file until there's nothing else in it:
     
     while (DB.available()) {
       String buffer = DB.readStringUntil('\n');
-      const Avem& found = setAvemFromFile(buffer, id);
+      
+      bool afterSeparator = false;
+      int notAvemStrCount = 0;
+      
+      char avemStr[AVEM_STR_SIZE];
+      for(int i = 0; buffer[i]; i++){
+        if(!afterSeparator && buffer[i] == SEPARATOR){
+          afterSeparator = true;
+          continue;
+        }
+        
+        if(!afterSeparator){
+          notAvemStrCount++;
+        } else {
+          avemStr[(i-notAvemStrCount)] = buffer[i];
+          avemStr[((i+1)-notAvemStrCount)] = 0;
+        }
 
-      if(found.isEmpty()) {
+        strcpy(avemStr, body);
+      }
+    }
+
+    return true;
+  } else {
+    // if the file didn't open
+#ifdef __DEV__
+    Serial.print("an error occured while reading file");
+#endif
+  }
+
+  return false;
+}
+
+Avem readFile(int id){
+  DB = SD.open(DB_FILE_NAME);
+  if (DB) {
+    // read from the file until there's nothing else in it:
+    
+    while (DB.available()) {
+      String buffer = DB.readStringUntil('\n');
+      Avem found = setAvemFromFile(buffer, id);
+
+      if(&found != 0 && !found.isEmpty()) {
         // close the file:
         DB.close();
-  
+        
         return found;
       }
     }
