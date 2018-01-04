@@ -150,7 +150,7 @@ const Avem& setAvemFromFile(String fileString, int pId){
   int jsonConfigProtocol = root["config"]["protocol"];
   
   AvemConfig av_conf(jsonConfigDecimal, jsonConfigBitLength, jsonConfigPulseLength,jsonConfigProtocol);
-  Avem av(jsonDeviceId,"default", av_conf, jsonDeviceId);
+  Avem av(jsonDeviceId, jsonName.c_str(), av_conf, jsonDeviceId);
 
   //sendAvem(av);
   return av;
