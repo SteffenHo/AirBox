@@ -107,6 +107,14 @@ public:
    const char* b = dec2binWzerofill(decimal, bit_length);
    return bin2tristate( b);
   }
+
+  int getBitLength() const {
+    return this->bit_length;
+  }
+
+  long getDecimal() const {
+    return this->decimal;
+  }
 };
 
 #endif
