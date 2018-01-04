@@ -55,6 +55,12 @@ void setup()
     sendConfigRoute.setCallback(send_config);
     router.add(sendConfigRoute);
 
+    HttpRoute deviceConfigIdRoute;
+    deviceConfigIdRoute.setRoute("/devices/configs/:id");
+    deviceConfigIdRoute.setMethod("GET");
+    deviceConfigIdRoute.setCallback(get_configs_id);
+    router.add(deviceConfigIdRoute);
+
     HttpRoute deviceConfigRoute;
     deviceConfigRoute.setRoute("/devices/configs");
     deviceConfigRoute.setMethod("GET");
@@ -73,6 +79,7 @@ void setup()
     }
 
     receiver.enableReceive(RECEIVER_PIN);
+    
     if(initSD()) {
       isSdInitialized = true;
       // ESP.restart();
@@ -88,18 +95,42 @@ void setup()
 }
 
 void get_configs(HttpRequest &request, HttpResponse &response) {
-  StaticJsonBuffer<200> jsonBuffer;
+  if(!isSdInitialized) {
+    response.statusCode = 503;
+    response.end();
+    return;
+  }
   
-  JsonObject& root = jsonBuffer.createObject();
-  root["sensor"] = "gps";
-  root["time"] = 1351824120;
-  
-  JsonArray& data = root.createNestedArray("data");
-  data.add(48.756080);
-  data.add(2.302038);
-  
-  root.printTo(response.body);
+  if(!readFileToString(response.body)) {
+    response.body[0] = 0;
+    response.statusCode = 500;
+    response.end();
+    return;
+  }
 
+  response.statusCode = 200;
+  response.end();
+}
+
+void get_configs_id(HttpRequest &request, HttpResponse &response) {
+  
+  int id = atoi(request.params.get(0));
+  if(id <= 0) {
+    response.statusCode = 400;
+    response.end();
+    
+    return;
+  }
+  
+  Avem av = readFile(id);
+  if(av.isEmpty()) {
+    response.statusCode = 404;
+    response.end();
+    
+    return;
+  }
+  
+  av.toJson(response.body, MAX_BODY_SIZE);
   response.statusCode = 200;
   response.end();
 }
@@ -107,8 +138,6 @@ void get_configs(HttpRequest &request, HttpResponse &response) {
 void save_config(HttpRequest &request, HttpResponse &response) {
   receiverIsActive = true;
   sendIsActive = false;
-
-  mainId = 1;
   
   response.statusCode = 200;
 }
@@ -125,7 +154,7 @@ void send_config(HttpRequest &request, HttpResponse &response) {
     return;
   }
   
-  const Avem& av = readFile(id);
+  Avem av = readFile(id);
   if(av.isEmpty()) {
     response.statusCode = 404;
     response.end();
