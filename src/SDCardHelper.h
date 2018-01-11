@@ -173,11 +173,11 @@ Avem setAvemFromFile(String fileString, int pId){
   return av;
 }
 
-bool readFileToString(char* body) {
-  DB = SD.open(DB_FILE_NAME);
+bool readFileToString(char* body,const char* fileName) {
+  DB = SD.open(fileName);
   if (DB) {
     // read from the file until there's nothing else in it:
-    
+    strcat(body, "[");
     while (DB.available()) {
       String buffer = DB.readStringUntil('\n');
       
@@ -186,21 +186,26 @@ bool readFileToString(char* body) {
       
       char avemStr[AVEM_STR_SIZE];
       for(int i = 0; buffer[i]; i++){
-        if(!afterSeparator && buffer[i] == SEPARATOR){
-          afterSeparator = true;
-          continue;
-        }
-        
         if(!afterSeparator){
           notAvemStrCount++;
         } else {
           avemStr[(i-notAvemStrCount)] = buffer[i];
           avemStr[((i+1)-notAvemStrCount)] = 0;
         }
-
-        strcpy(avemStr, body);
+        
+        if(!afterSeparator && buffer[i] == SEPARATOR){
+          afterSeparator = true;
+          continue;
+        }
+        
+        
       }
+        strcat(body, avemStr);
+        strcat(body, ",");
+        //Serial.println(body);
     }
+    body[strlen(body)-1] = ']';
+     
 
     return true;
   } else {
@@ -237,6 +242,25 @@ Avem readFile(int id){
   }
 
   return Avem::EMPTY;
+}
+
+
+//device
+bool addStringToFile(const char* string, const char* fileName){
+  DB = SD.open(fileName, FILE_APPEND);
+  if (DB) {
+#ifdef __DEV__
+    Serial.println(string);
+#endif
+    DB.println(string);
+    DB.close();
+    return true;
+  } else {
+#ifdef __DEV__
+    Serial.println("error opening ");
+#endif
+    return false;
+  }
 }
 
 
