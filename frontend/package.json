@@ -4,8 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --colors --progress --config ./webpack/dev.babel.js --host 0.0.0.0 --history-api-fallback",
-    "build": "npm run build:js && npm run build:scss",
-    "build:js": "node build.js",
+    "build": "npm run clean && npm run build:js && npm run build:scss",
+    "clean": "node scripts/clean.js",
+    "build:js": "node scripts/build.js",
     "build:scss": "node-sass --include-path src/scss src/scss/index.scss src/bundle.css"
   },
   "author": "Michael Braun",

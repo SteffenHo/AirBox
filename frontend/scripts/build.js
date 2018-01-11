@@ -4,7 +4,8 @@ console.log(ClosureCompiler.COMPILER_PATH); // absolute path the compiler jar
 console.log(ClosureCompiler.CONTRIB_PATH); // absolute path the contrib folder which contains
 
 var closureCompiler = new ClosureCompiler([
-    '--js', 'src/**.js',
+    '--js', 'src/*.js',
+    '--js', 'src/**/*.js',
     '--compilation_level', 'ADVANCED',
     '--js_output_file', 'src/bundle.js',
     '--language_in', 'ECMASCRIPT6',
