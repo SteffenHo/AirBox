@@ -7,6 +7,7 @@
 #include "HttpRouter.h"
 
 #include "avem.h"
+#include "device.h"
 #include <RCSwitch.h>
 #include "helper.h"
 #include "SDCardHelper.h"
@@ -73,6 +74,18 @@ void setup()
     saveConfigRoute.setCallback(save_config);
     router.add(saveConfigRoute);
 
+    HttpRoute mainBundleRoute;
+    mainBundleRoute.setRoute("/main/bundle");
+    mainBundleRoute.setMethod("GET");
+    mainBundleRoute.setCallback(get_main_bundle);
+    router.add(mainBundleRoute);
+
+    HttpRoute saveDeviceRoute;
+    saveDeviceRoute.setRoute("/device");
+    saveDeviceRoute.setMethod("POST");
+    saveDeviceRoute.setCallback(save_device);
+    router.add(saveDeviceRoute);
+
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
@@ -94,6 +107,13 @@ void setup()
     Serial.println("Web server started");
 }
 
+void get_main_bundle(HttpRequest &request, HttpResponse &response) {
+  char text[4096] = "Test";
+  strcpy(response.body, text);
+  response.statusCode = 200;
+    response.end();
+}
+
 void get_configs(HttpRequest &request, HttpResponse &response) {
   if(!isSdInitialized) {
     response.statusCode = 503;
@@ -101,7 +121,7 @@ void get_configs(HttpRequest &request, HttpResponse &response) {
     return;
   }
   
-  if(!readFileToString(response.body)) {
+  if(!readFileToString(response.body, DB_FILE_NAME )) {
     response.body[0] = 0;
     response.statusCode = 500;
     response.end();
@@ -171,6 +191,20 @@ void send_config(HttpRequest &request, HttpResponse &response) {
   response.statusCode = 200;
   response.end();
 }
+
+
+void save_device(HttpRequest &request, HttpResponse &response) {
+  Serial.println("Save device");
+  StaticJsonBuffer<200> jsonBuffer;
+  JsonObject& requestBody = jsonBuffer.parseObject(request.body.getRaw(), MAX_BODY_SIZE);
+  const char* name = requestBody["name"];
+  mainDeviceId++;
+  Device d( mainDeviceId, name);
+  d.print();
+  createDeviceString(d);
+  response.statusCode = 200;
+  response.end();
+  }
 
 void client_loop(HttpRequest &request, HttpResponse &response) {
 #ifdef __DEV__
