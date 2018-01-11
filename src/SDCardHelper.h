@@ -54,8 +54,6 @@ int getMainId(const char* fileName){
       }
       else if( fileName == DEVICE_DB_FILE_NAME){
         if(tempId> mainDeviceId){
-          Serial.println("Main device ID");
-          Serial.println(tempId);
           mainDeviceId = tempId;
         }
       }

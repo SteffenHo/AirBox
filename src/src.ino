@@ -86,6 +86,12 @@ void setup()
     saveDeviceRoute.setCallback(save_device);
     router.add(saveDeviceRoute);
 
+    HttpRoute devicesRoute;
+    devicesRoute.setRoute("/devices");
+    devicesRoute.setMethod("GET");
+    devicesRoute.setCallback(get_devices);
+    router.add(devicesRoute);
+
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.print(".");
@@ -194,17 +200,32 @@ void send_config(HttpRequest &request, HttpResponse &response) {
 
 
 void save_device(HttpRequest &request, HttpResponse &response) {
-  Serial.println("Save device");
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& requestBody = jsonBuffer.parseObject(request.body.getRaw(), MAX_BODY_SIZE);
-  const char* name = requestBody["name"];
   mainDeviceId++;
-  Device d( mainDeviceId, name);
-  d.print();
+  Device d( mainDeviceId, requestBody["name"]);
   createDeviceString(d);
   response.statusCode = 200;
   response.end();
+}
+
+void get_devices(HttpRequest &request, HttpResponse &response) {
+  if(!isSdInitialized) {
+    response.statusCode = 503;
+    response.end();
+    return;
   }
+  
+  if(!readFileToString(response.body, DEVICE_DB_FILE_NAME )) {
+    response.body[0] = 0;
+    response.statusCode = 500;
+    response.end();
+    return;
+  }
+
+  response.statusCode = 200;
+  response.end();
+}
 
 void client_loop(HttpRequest &request, HttpResponse &response) {
 #ifdef __DEV__
