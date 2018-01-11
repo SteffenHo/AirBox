@@ -53,6 +53,7 @@ bool HttpRoute::validateAndCall(HttpRequest &request, HttpResponse &response) {
     
   for(int i = 0; i < route_size; i++) {
     if(this->routeArray.get(i)[0] == ':') {
+      delay(20);
       request.params.add(request.route.get(i));
       continue;
     }
