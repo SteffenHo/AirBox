@@ -108,7 +108,8 @@ void sendAvem(const Avem &av){
 
   sender.setProtocol(av.getProtocol());
   sender.setPulseLength(av.getPulseLength());
-  sender.sendTriState(av.getTriState());
+  sender.send(av.getDecimal(), av.getBitLength());
+  //sender.sendTriState(av.getTriState());
 }
 
 Avem setAvemFromFile(String fileString, int pId){
