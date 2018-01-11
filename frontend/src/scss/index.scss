@@ -1,0 +1,10 @@
+@import "./variables.scss";
+@import "./header.scss";
+
+body {
+  margin: 0;
+  background-color: $background-color;
+
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: $text-color;
+}

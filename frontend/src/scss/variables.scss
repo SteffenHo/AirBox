@@ -1,0 +1,4 @@
+@import "utils/contrast.scss";
+
+$background-color: #3E3E3E;
+$text-color: contrast($background-color);
