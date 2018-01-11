@@ -9,6 +9,7 @@
 RCSwitch sender = RCSwitch();
 File DB;
 int mainId = -1;
+int mainDeviceId = -1;
 
 int getIdFromString(String fileString){
   bool afterSeparator = false;
@@ -36,8 +37,8 @@ int getIdFromString(String fileString){
   return id;
 }
 
-int getMainId(){
-  DB = SD.open(DB_FILE_NAME);
+int getMainId(const char* fileName){
+  DB = SD.open(fileName);
   if (DB) {
     while (DB.available() ) {
       String buffer = DB.readStringUntil('\n');
@@ -46,9 +47,17 @@ int getMainId(){
 #ifdef __DEV__
       Serial.println(tempId);
 #endif
-      
-      if(tempId> mainId){
-        mainId = tempId;
+      if(fileName == DB_FILE_NAME){
+        if(tempId> mainId){
+          mainId = tempId;
+        }
+      }
+      else if( fileName == DEVICE_DB_FILE_NAME){
+        if(tempId> mainDeviceId){
+          Serial.println("Main device ID");
+          Serial.println(tempId);
+          mainDeviceId = tempId;
+        }
       }
     }
     
@@ -57,7 +66,13 @@ int getMainId(){
     return mainId;
   } else {
     Serial.print("cannot open DB");
-    mainId = 1; // danger!
+    if(fileName == DB_FILE_NAME){
+        mainId = 1; // danger!
+      }
+      else if( fileName == DEVICE_DB_FILE_NAME){
+         mainDeviceId = 1;
+      }
+  
     return 0;
   }
 }
@@ -69,7 +84,8 @@ bool initSD(){
       Serial.printf("Total space: %lluMB\n", SD.totalBytes() / (1024 * 1024));
       Serial.printf("Used space: %lluMB\n", SD.usedBytes() / (1024 * 1024));
 #endif
-      getMainId();
+      getMainId(DEVICE_DB_FILE_NAME);
+      getMainId(DB_FILE_NAME);
       return true;
     }
 
