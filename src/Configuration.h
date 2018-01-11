@@ -8,7 +8,7 @@
 
 // Pinout
 #define SD_PIN 22
-#define SEND_PIN 16
+#define SEND_PIN 27
 #define RECEIVER_PIN 2
 
 // Board
