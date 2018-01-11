@@ -81,7 +81,7 @@ bool initSD(){
 }
 
 bool addAvemToDB(const char* string){
-  DB = SD.open(DB_FILE_NAME, FILE_WRITE);
+  DB = SD.open(DB_FILE_NAME, FILE_APPEND);
 
   // if the file opened okay, write to it:
   if (DB) {
