@@ -1,0 +1,52 @@
+@import "./variables.scss";
+@import "utils/contrast.scss";
+
+.remoteControl{
+    margin: 5px;
+    border: 1px solid mix($text-color, $background-color, 70);
+    border-radius: 5px;
+    .information { 
+        margin: 5px;
+        text-align: right;
+
+    }
+}
+.device {
+    min-width:  $controleDevice-width;
+    max-width: 100%;
+    padding: 10px 0px;
+
+}
+.controls{
+    border: 1px solid mix($text-color, $background-color, 70);
+    text-align: -webkit-center;
+    padding: 15px;
+    
+}
+
+$control-background-color: mix($text-color, $background-color, 10);
+
+.controlButton {
+    display: block;
+    margin: 5px;
+    background-color: $control-background-color;
+    //border: 1px solid mix($text-color, $background-color, 70);
+    border-radius: 5px;
+    border:none;
+    min-width: 75px;
+    color: mix(mix($text-color, $background-color, 70), contrast($control-background-color));
+    box-shadow: 2px 2px 0px #5a5a5a;
+    margin: 10px;
+}
+
+.content {
+    flex-wrap: wrap;
+    justify-content: space-around;
+    display: flex
+}
+
+@media (max-width: $controleDevice-width*2){
+    .device {
+        width: 90% ;
+    }
+}

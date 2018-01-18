@@ -1,5 +1,6 @@
 @import "./variables.scss";
 @import "./header.scss";
+@import "./remoteControl.scss";
 
 body {
   margin: 0;
@@ -7,4 +8,5 @@ body {
 
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: $text-color;
+  padding-top: 60px;
 }
