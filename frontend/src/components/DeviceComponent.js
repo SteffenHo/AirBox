@@ -8,22 +8,20 @@ export default class DeviceComponent {
     }
 
     update(device) {
-        const { createElement } = document;
-
         if(!this.elements) {
-            const root = createElement('div');
+            const root = document.createElement('div');
             root.className = 'device';
 
-            const remoteControl = createElement('div');
-            remoteControl.className = 'remote-control';
+            const remoteControl = document.createElement('div');
+            remoteControl.className = 'remoteControl';
 
             root.appendChild(remoteControl);
 
-            const information = createElement('div');
+            const information = document.createElement('div');
             information.className = 'information';
             remoteControl.appendChild(information);
 
-            const controls = createElement('div');
+            const controls = document.createElement('div');
             controls.className = 'controls';
             remoteControl.appendChild(controls);
 
