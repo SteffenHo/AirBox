@@ -1,7 +1,14 @@
 @import "./variables.scss";
 @import "utils/contrast.scss";
 
-.remoteControl{
+.content {
+    flex-wrap: wrap;
+    justify-content: space-around;
+    display: flex;
+    user-select: none;
+}
+
+.remote-control{
     margin: 5px;
     border: 1px solid mix($text-color, $background-color, 70);
     border-radius: 5px;
@@ -28,22 +35,27 @@ $control-background-color: mix($text-color, $background-color, 10);
 
 .control-button {
     display: block;
-    margin: 5px;
-    background-color: $control-background-color;
-    //border: 1px solid mix($text-color, $background-color, 70);
     border-radius: 5px;
     border:none;
-    min-width: 75px;
+    min-width: 150px;
     color: mix(mix($text-color, $background-color, 70), contrast($control-background-color));
-    box-shadow: 2px 2px 0px #5a5a5a;
+    box-shadow: 0 5px mix( $control-background-color, contrast($control-background-color), 80);
     margin: 10px;
+    min-height: 50px;
+    background-color: $control-background-color;
+    position: relative;
 }
 
-.content {
-    flex-wrap: wrap;
-    justify-content: space-around;
-    display: flex
+.control-button:hover {
+    box-shadow: 0 2px mix( $control-background-color, contrast($control-background-color), 80);
+    top: 2px
 }
+
+.control-button:focus {
+    outline: 0;
+}
+
+
 
 @media (max-width: $controleDevice-width*2){
     .device {
