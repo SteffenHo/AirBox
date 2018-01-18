@@ -4,9 +4,10 @@
 
 body {
   margin: 0;
-  background-color: $background-color;
+  //background-color: $background-color;
 
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: $text-color;
   padding-top: 60px;
+  background: linear-gradient(to bottom right, $background-color, mix($background-color, #111111, 10));
 }

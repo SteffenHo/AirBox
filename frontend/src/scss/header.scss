@@ -10,7 +10,7 @@ header {
   right: 0;
   z-index: 999;
   background-color: rgba($background-color, 0.8);
-  box-shadow: 0 0 10px contrast($text-color);
+  box-shadow: 0 0 10px contrast(contrast($background-color));
   h1 {
     margin: 0;
     color: mix($text-color, $background-color, 80);
