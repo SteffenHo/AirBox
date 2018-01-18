@@ -26,7 +26,7 @@
 
 $control-background-color: mix($text-color, $background-color, 10);
 
-.controlButton {
+.control-button {
     display: block;
     margin: 5px;
     background-color: $control-background-color;
