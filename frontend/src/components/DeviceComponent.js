@@ -1,10 +1,16 @@
 import ConfigComponent from './ConfigComponent.js';
+import ConfigComponentBase from './ConfigComponentBase.js';
 
 export default class DeviceComponent {
     constructor(root, device) {
         this.root = root;
 
+        this.onCreate = this.onCreate.bind(this);
         this.update(device);
+    }
+
+    onCreate(event) {
+         console.log(event);
     }
 
     update(device) {
@@ -13,13 +19,27 @@ export default class DeviceComponent {
             root.className = 'device';
 
             const remoteControl = document.createElement('div');
-            remoteControl.className = 'remoteControl';
+            remoteControl.className = 'remote-control';
 
             root.appendChild(remoteControl);
 
             const information = document.createElement('div');
             information.className = 'information';
             remoteControl.appendChild(information);
+
+            const settings = document.createElement('div');
+            settings.className = 'information__settings';
+            information.appendChild(settings);
+
+            const addButton = document.createElement('div');
+            addButton.className = 'information__settings__add';
+            addButton.onclick = this.onCreate;
+            addButton.innerText = '+';
+            settings.appendChild(addButton);
+
+            const nameElement = document.createElement('div');
+            nameElement.className = 'information__name';
+            information.appendChild(nameElement);
 
             const controls = document.createElement('div');
             controls.className = 'controls';
@@ -32,12 +52,14 @@ export default class DeviceComponent {
                 remoteControl,
                 controls,
                 information,
+                nameElement,
+                settings,
             };
         }
 
-        const { information, controls } = this.elements;
+        const { nameElement, controls } = this.elements;
 
-        information.innerText = device.name || '';
+        nameElement.innerText = device.name || '';
 
         device.configs.forEach((config) => {
             if(!config.handler) {
