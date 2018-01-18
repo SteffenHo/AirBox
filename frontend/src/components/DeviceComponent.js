@@ -1,3 +1,5 @@
+import ConfigComponent from './ConfigComponent.js';
+
 export default class DeviceComponent {
     constructor(root, device) {
         this.root = root;
@@ -36,5 +38,13 @@ export default class DeviceComponent {
         const { information, controls } = this.elements;
 
         information.innerText = device.name || '';
+
+        device.configs.forEach((config) => {
+            if(!config.handler) {
+                config.handler = new ConfigComponent(controls, config);
+            }
+
+            config.handler.update(config);
+        });
     }
 }
