@@ -10,6 +10,9 @@ void HttpResponse::send(WiFiClient &client) {
   this->header.set("Content-Type", "application/json");
   this->header.set("Content-Length", strlen(this->body));
   this->header.set("Connection", "close");
+  this->header.set("Access-Control-Allow-Origin", CORS_ALLOWED_ORIGINS);
+  this->header.set("Access-Control-Allow-Methods", CORS_ALLOWED_METHODS);
+  this->header.set("Access-Control-Allow-Headers", CORS_ALLOWED_HEADERS);
 
   // set headers
   for(int i = 0, j = response.header.getSize(); i < j; i++) {
