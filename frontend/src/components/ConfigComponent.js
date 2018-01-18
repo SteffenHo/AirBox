@@ -1,24 +1,27 @@
+import ConfigComponentBase from './ConfigComponentBase.js';
+
 export default class ConfigComponent {
     constructor(root, config) {
         this.root = root;
 
         this.update(config);
+        this.onClick = this.onClick.bind(this);
+    }
+
+    onClick(event) {
+        console.log(event);
     }
 
     update(config) {
-        if(!this.elements) {
-            const root = document.createElement('button');
-            root.className = 'control-button';
+        const componentConfig = {
+            title: config.name,
+            onClick: this.onClick,
+        };
 
-            this.root.appendChild(root);
-
-            this.elements = {
-                root,
-            };
+        if(!this.baseComponent) {
+            this.baseComponent = new ConfigComponentBase(this.root, componentConfig);
         }
 
-        const { root } = this.elements;
-
-        root.innerText = config.name;
+        this.baseComponent.update(componentConfig);
     }
 }
