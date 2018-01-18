@@ -1,8 +1,4 @@
-export default function loadDevices() {
-    return Promise.resolve([
-        {
-            id: 1,
-            name: "Test"
-        },
-    ]);
-}
+import request from '../utils/request.js';
+
+const loadDevices = () => request('http://airbox/devices');
+export default loadDevices;
