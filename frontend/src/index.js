@@ -1,5 +1,6 @@
 import loadConfigs from './api/loadConfigs.js';
 import loadDevices from './api/loadDevices.js';
+import refreshDevices from './components/refreshDevices.js';
 
 function bootstrap() {
     let devices = null;
@@ -21,6 +22,8 @@ function bootstrap() {
                 const device = devices.find(d => d.id === config.deviceId);
                 device.configs.push(config);
             });
+
+            refreshDevices(devices);
         });
 }
 
