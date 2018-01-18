@@ -1,4 +1,5 @@
 import ConfigComponentBase from './ConfigComponentBase.js';
+import sendConfig from '../api/sendConfig.js';
 
 export default class ConfigComponent {
     constructor(root, config) {
@@ -8,11 +9,15 @@ export default class ConfigComponent {
         this.onClick = this.onClick.bind(this);
     }
 
-    onClick(event) {
-        console.log(event);
+    onClick() {
+        const { id } = this.config;
+
+        sendConfig(id);
     }
 
     update(config) {
+        this.config = config;
+
         const componentConfig = {
             title: config.name,
             onClick: this.onClick,
