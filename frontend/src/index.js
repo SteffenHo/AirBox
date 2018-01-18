@@ -11,6 +11,8 @@ function bootstrap() {
                 device.configs = [];
                 return device;
             });
+
+            refreshDevices(devices);
         })
         .then(() => {
             return loadConfigs();
