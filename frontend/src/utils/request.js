@@ -25,13 +25,15 @@ export default function request(url, method = 'GET', pHeaders = null, data = nul
     return fetch(url, options)
         .then(res => {
             if(res.status === HttpStatusCodes.OK) {
-                return {
-                    body: res.json(),
-                };
+                return res.json()
+                    .then((json) => ({
+                        body: json,
+                    }));
             }
 
-            return {
-                body: res.text(),
-            };
+            return res.text()
+                .then((text) => ({
+                    body: text,
+                }));
         });
 }
