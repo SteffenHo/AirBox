@@ -56,9 +56,23 @@ $control-background-color: mix($text-color, $background-color, 10);
 }
 
 
+.outer-frame {
+    margin: 0;
+}
 
 @media (max-width: $controleDevice-width*2){
     .device {
         width: 90% ;
+    }
+}
+
+@media (min-width: 1024px){
+    .outer-frame {
+        width: 20%;
+    }
+    .inner-frame {
+        margin: 0 auto;
+        width: 80%;
+        background-color: white;
     }
 }
