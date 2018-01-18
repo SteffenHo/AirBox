@@ -1,5 +1,5 @@
 import ConfigComponent from './ConfigComponent.js';
-import ConfigComponentBase from './ConfigComponentBase.js';
+import createConfig from '../api/createConfig.js';
 
 export default class DeviceComponent {
     constructor(root, device) {
@@ -10,10 +10,17 @@ export default class DeviceComponent {
     }
 
     onCreate(event) {
-         console.log(event);
+        const { id } = this.device;
+        const name = window.prompt('Name: ');
+
+        createConfig(id, name).then(() => {
+            window.alert('created');
+        });
     }
 
     update(device) {
+        this.device = device;
+
         if(!this.elements) {
             const root = document.createElement('div');
             root.className = 'device';
