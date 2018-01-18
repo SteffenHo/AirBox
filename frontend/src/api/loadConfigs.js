@@ -1,13 +1,4 @@
-export default function loadConfigs() {
-    return fetch('http://airbox/devices/configs', {
-        headers: {
-            'Cache-Control': 'no-cache',
-        }
-    }).then(res => {
-        if(res.statusCode === 200) {
-            return res.json();
-        }
+import request from '../utils/request.js';
 
-        return res.text();
-    });
-}
+const loadConfigs = () => request('http://airbox/devices/configs');
+export default loadConfigs;
