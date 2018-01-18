@@ -49,6 +49,11 @@ void setup()
     tcpip_adapter_set_hostname(TCPIP_ADAPTER_IF_STA, "airbox");
     WiFi.setHostname("airbox");
 #endif
+    HttpRoute optionsHandlerRoute;
+    optionsHandlerRoute.setRoute("/");
+    optionsHandlerRoute.setMethod("OPTIONS");
+    optionsHandlerRoute.setCallback(handle_options_request);
+    router.add(optionsHandlerRoute);
 
     HttpRoute sendConfigRoute;
     sendConfigRoute.setRoute("/devices/configs/:id/send");
@@ -118,6 +123,11 @@ void get_main_bundle(HttpRequest &request, HttpResponse &response) {
   strcpy(response.body, text);
   response.statusCode = 200;
     response.end();
+}
+
+void handle_options_request(HttpRequest &request, HttpResponse &response) {
+  response.statusCode = 200;
+  response.end();
 }
 
 void get_configs(HttpRequest &request, HttpResponse &response) {
