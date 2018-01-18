@@ -80,11 +80,11 @@ void setup()
     mainBundleRoute.setCallback(get_main_bundle);
     router.add(mainBundleRoute);
 
-    HttpRoute saveDeviceRoute;
-    saveDeviceRoute.setRoute("/device");
-    saveDeviceRoute.setMethod("POST");
-    saveDeviceRoute.setCallback(save_device);
-    router.add(saveDeviceRoute);
+    HttpRoute saveDevicesRoute;
+    saveDevicesRoute.setRoute("/devices");
+    saveDevicesRoute.setMethod("POST");
+    saveDevicesRoute.setCallback(save_devices);
+    router.add(saveDevicesRoute);
 
     HttpRoute devicesRoute;
     devicesRoute.setRoute("/devices");
@@ -199,7 +199,7 @@ void send_config(HttpRequest &request, HttpResponse &response) {
 }
 
 
-void save_device(HttpRequest &request, HttpResponse &response) {
+void save_devices(HttpRequest &request, HttpResponse &response) {
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& requestBody = jsonBuffer.parseObject(request.body.getRaw(), MAX_BODY_SIZE);
   mainDeviceId++;
