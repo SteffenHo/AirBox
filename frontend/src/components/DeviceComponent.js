@@ -2,8 +2,10 @@ import ConfigComponent from './ConfigComponent.js';
 import createConfig from '../api/createConfig.js';
 
 export default class DeviceComponent {
-    constructor(root, device) {
+    constructor(root, device, reloadDevices) {
         this.root = root;
+
+        this.reloadDevices = reloadDevices;
 
         this.onCreate = this.onCreate.bind(this);
         this.update(device);
@@ -14,6 +16,7 @@ export default class DeviceComponent {
         const name = window.prompt('Name: ');
 
         createConfig(id, name).then(() => {
+            this.reloadDevices();
             window.alert('created');
         });
     }

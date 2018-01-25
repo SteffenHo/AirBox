@@ -2,8 +2,11 @@ import loadConfigs from './api/loadConfigs.js';
 import loadDevices from './api/loadDevices.js';
 import refreshDevices from './components/refreshDevices.js';
 
-function bootstrap() {
-    let devices = null;
+let devices = null;
+
+function reloadData() {
+    const root = document.querySelector('main.content');
+    root.innerHTML = '';
 
     loadDevices()
         .then((data) => {
@@ -12,7 +15,7 @@ function bootstrap() {
                 return device;
             });
 
-            refreshDevices(devices);
+            refreshDevices(root, devices, reloadData);
         })
         .then(() => {
             return loadConfigs();
@@ -25,8 +28,9 @@ function bootstrap() {
                 device.configs.push(config);
             });
 
-            refreshDevices(devices);
+            refreshDevices(root, devices);
         });
 }
 
-bootstrap();
+
+reloadData();

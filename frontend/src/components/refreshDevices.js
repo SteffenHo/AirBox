@@ -1,11 +1,9 @@
 import DeviceComponent from './DeviceComponent.js';
 
-const root = document.querySelector('main.content');
-
-export default function refreshDevices(deviceList) {
+export default function refreshDevices(root, deviceList, reloadData) {
     deviceList.forEach((device) => {
         if(!device.handler) {
-            device.handler = new DeviceComponent(root, device);
+            device.handler = new DeviceComponent(root, device, reloadData);
         }
 
         device.handler.update(device);
