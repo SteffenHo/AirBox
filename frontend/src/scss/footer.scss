@@ -1,0 +1,21 @@
+@import "./variables.scss";
+@import "utils/contrast.scss";
+
+footer {
+    padding-top: 15px;
+    display: flex;
+    justify-content: space-evenly;
+    z-index: 999;
+    background-color: rgba($background-color, 0.8);
+    //box-shadow: 0 0 10px contrast(contrast($background-color));
+    h3 {
+      margin: 0;
+      color: mix($text-color, $background-color, 80);
+      text-align: center;
+    }
+    .address{
+        p {
+            margin: 0;
+        }
+    }
+  }
