@@ -30,17 +30,21 @@ int HttpHeader::getIndex(const char* p_name) {
 
 int HttpHeader::set(const char* p_name, const char* p_value) {
   int index = getIndex(p_name);
+
+  if(index >= MAX_HEADER_ENTRIES || this->size + 1 >= MAX_HEADER_ENTRIES) {
+    return false;
+  }
   
   if(index >= 0) {
     return entries[index].set(p_name, p_value);
   }
-
+  
   int success = entries[this->size++].set(p_name, p_value);
 
   if(!success) {
     this->size--;
   }
-
+  
   return success;
 }
 

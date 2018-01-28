@@ -26,7 +26,7 @@ class HttpHeader {
     int getSize() const;
     const HttpHeaderEntry* get(int index);
   private:
-    int size;
+    int size = 0;
     HttpHeaderEntry entries[MAX_HEADER_ENTRIES];
 };
 
