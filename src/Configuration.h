@@ -17,9 +17,11 @@
 #define BOARD BOARD_ESP_32
 
 // server settings
+#define MAX_CLIENTS 4
+
 #define MAX_BODY_SIZE 2024
 
-#define MAX_HEADER_ENTRIES 25
+#define MAX_HEADER_ENTRIES 10
 #define MAX_HEADER_KEY_LENGTH 64
 #define MAX_HEADER_VALUE_LENGTH 512
 
