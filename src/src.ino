@@ -18,8 +18,8 @@ bool sendIsActive =  false;
 bool isProcessingTask = false;
 bool isSdInitialized = false;
 
-char* ssid     = "fh_ge_ahaus";
-char* password = "8468841547122342";
+char* ssid     = "FRITZ!Box-7490";
+char* password = "14705832699035580219";
 
 WiFiServer server(SERVER_PORT);
 
