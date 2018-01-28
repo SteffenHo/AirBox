@@ -1,4 +1,5 @@
 #include "http_helper.h"
+#include "WifiClientHandler.h"
 #include "HttpHeader.h"
 
 #define CHAR_NEW_LINE 13
@@ -33,10 +34,11 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
       lineType = 2;
       return;
     }
-
+    
     char *p = strtok(buffer, ":");
     char *p2 = strtok(NULL, ":");
 
+    request.header.print();
     request.header.set(p, p2);
   } else if(lineType == 2) {
     request.body.write(buffer);
@@ -112,8 +114,82 @@ const char* http_get_status_message(unsigned int status_code) {
   }
 }
 
+WifiClientHandler* clientHandlers[MAX_CLIENTS] = { NULL };
 void http_helper_loop(HttpRequest &request, HttpResponse &response, void(*callback)(HttpRequest&, HttpResponse&)) {
+  WiFiClient newClient = server.available();
+  if (newClient) {
+    Serial.println("new client");
+    // Find the first unused space
+    for (int i=0 ; i < MAX_CLIENTS ; ++i) {
+        if (NULL == clientHandlers[i]) {
+            clientHandlers[i] = new WifiClientHandler(newClient);
+            break;
+        }
+     }
+  }
+
+    // Check whether each client has some data
+  for (int i=0 ; i<MAX_CLIENTS ; ++i) {
+    // If the client is in use, and has some data...
+    if (clientHandlers[i] != NULL && clientHandlers[i]->getClient() != NULL) {
+      WifiClientHandler* clientHandler = clientHandlers[i];
+      WiFiClient* client = clientHandler->getClient();
+      
+      if (!client->connected() || clientHandler->shouldConnectionClose()) {
+        client->flush();
+        client->stop();
+        delete clientHandlers[i];
+        clientHandlers[i] = NULL;
+        
+        return;
+      }
+
+      if(clientHandler->request.ready) {
+        Serial.println(">>>>REQUEST READY<<<<<<");
+
+        process_request(clientHandler->request, clientHandler->response);
+      }
+
+      if(clientHandler->lineType == 2) {
+        client->flush();
+        client->stop();
+        delete clientHandlers[i];
+        clientHandlers[i] = NULL;
+        
+        return;
+      }
+      
+      if (client->available() ) {
+        // Read the data 
+        char newChar = client->read();
+
+        clientHandler->linebuf[clientHandler->charcount++] = newChar;
+
+        if(newChar == '\n' || newChar == '\r') {
+          clientHandler->linebuf[clientHandler->charcount] = 0;
+          parse_http_request(clientHandler->request, clientHandler->linebuf, clientHandler->lineType);
+         
+          memset(clientHandler->linebuf, 0, sizeof(clientHandler->linebuf));
+          clientHandler->charcount=0;
+        }
+      }
+    }
+  }
+  /*
   WiFiClient client = server.available();
+
+  if(client) {
+    Serial.print("Client address: ");
+    Serial.println((int) &client);
+  }
+  
+  client = server.available();
+  
+  if(client) {
+    Serial.print("Client address: ");
+    Serial.println((int) &client);
+  }
+
   if (client) {
     memset(linebuf, 0, sizeof(linebuf));
     
@@ -154,6 +230,7 @@ void http_helper_loop(HttpRequest &request, HttpResponse &response, void(*callba
       }
     }
   }
+  */
 }
 
 void process_request(HttpRequest &request, HttpResponse &response) {
