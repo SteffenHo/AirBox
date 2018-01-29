@@ -37,8 +37,6 @@ void parse_http_request(HttpRequest &request, char* buffer, int &lineType) {
     
     char *p = strtok(buffer, ":");
     char *p2 = strtok(NULL, ":");
-
-    request.header.print();
     request.header.set(p, p2);
   } else if(lineType == 2) {
     request.body.write(buffer);
