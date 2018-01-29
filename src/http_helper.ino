@@ -149,6 +149,8 @@ void http_helper_loop(HttpRequest &request, HttpResponse &response, void(*callba
       }
 
       if(clientHandler->lineType == 2) {
+
+        clientHandler->response.clear();
         client->flush();
         client->stop();
         delete clientHandlers[i];
@@ -233,6 +235,7 @@ void http_helper_loop(HttpRequest &request, HttpResponse &response, void(*callba
 
 void process_request(HttpRequest &request, HttpResponse &response) {
   if(!router.process(request, response)) {
+    response.body[0] = 0;
     response.statusCode = 404;
     response.end();
   }
