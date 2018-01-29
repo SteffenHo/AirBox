@@ -27,14 +27,13 @@ void HttpResponse::send(WiFiClient &client) {
 
   // start body
   client.println();
-  
+
   client.println(this->body);
 
   // give the web browser time to receive the data
   delay(1);
   
   // close the connection:
-  client.stop();
 }
 
 void HttpResponse::clear() {
