@@ -80,7 +80,7 @@ void setup()
     router.add(saveConfigRoute);
 
     HttpRoute mainBundleRoute;
-    mainBundleRoute.setRoute("/main/bundle");
+    mainBundleRoute.setRoute("/main.bundle.js");
     mainBundleRoute.setMethod("GET");
     mainBundleRoute.setCallback(get_main_bundle);
     router.add(mainBundleRoute);
