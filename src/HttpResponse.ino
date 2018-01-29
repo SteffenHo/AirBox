@@ -7,7 +7,10 @@ void HttpResponse::send(WiFiClient &client) {
   client.print(' ');
   client.println(http_get_status_message(this->statusCode));
 
-  this->header.set("Content-Type", "application/json");
+  if(this->header.getIndex("Content-Type") == -1) {
+    this->header.set("Content-Type", "application/json");
+  }
+  
   this->header.set("Content-Length", strlen(this->body));
   this->header.set("Connection", "close");
   this->header.set("Access-Control-Allow-Origin", CORS_ALLOWED_ORIGINS);
