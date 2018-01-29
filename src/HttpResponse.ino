@@ -18,7 +18,7 @@ void HttpResponse::send(WiFiClient &client) {
   this->header.set("Access-Control-Allow-Headers", CORS_ALLOWED_HEADERS);
 
   // set headers
-  for(int i = 0, j = response.header.getSize(); i < j; i++) {
+  for(int i = 0, j = this->header.getSize(); i < j; i++) {
     const HttpHeaderEntry* entry = this->header.get(i);
     client.print(entry->getName());
     client.print(": ");
