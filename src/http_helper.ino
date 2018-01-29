@@ -148,7 +148,8 @@ void http_helper_loop(HttpRequest &request, HttpResponse &response, void(*callba
         process_request(clientHandler->request, clientHandler->response);
       }
 
-      if(clientHandler->lineType == 2) {
+      if(clientHandler->response.isReady()) {
+        clientHandler->response.send(*client);
 
         clientHandler->response.clear();
         client->flush();
