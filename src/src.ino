@@ -85,6 +85,12 @@ void setup()
     mainBundleRoute.setCallback(get_main_bundle);
     router.add(mainBundleRoute);
 
+    HttpRoute mainCssBundleRoute;
+    mainCssBundleRoute.setRoute("/main.bundle.css");
+    mainCssBundleRoute.setMethod("GET");
+    mainCssBundleRoute.setCallback(get_main_css_bundle);
+    router.add(mainCssBundleRoute);
+
     HttpRoute saveDevicesRoute;
     saveDevicesRoute.setRoute("/devices");
     saveDevicesRoute.setMethod("POST");
@@ -96,6 +102,12 @@ void setup()
     devicesRoute.setMethod("GET");
     devicesRoute.setCallback(get_devices);
     router.add(devicesRoute);
+
+    HttpRoute indexRoute;
+    indexRoute.setRoute("/");
+    indexRoute.setMethod("GET");
+    indexRoute.setCallback(get_index);
+    router.add(indexRoute);
 
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
@@ -120,6 +132,29 @@ void setup()
 
 void get_main_bundle(HttpRequest &request, HttpResponse &response) {
   char text[4096] = "Test";
+
+  response.header.set("Content-Type", "application/javascript");
+  
+  strcpy(response.body, text);
+  response.statusCode = 200;
+    response.end();
+}
+
+void get_main_css_bundle(HttpRequest &request, HttpResponse &response) {
+  char text[4096] = "Test";
+
+  response.header.set("Content-Type", "text/css");
+  
+  strcpy(response.body, text);
+  response.statusCode = 200;
+    response.end();
+}
+
+void get_index(HttpRequest &request, HttpResponse &response) {
+  char text[] = "<html><head><title>AirBox</title><link rel=\"stylesheet\" href=\"main.bundle.css\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"></head><body><div class=\"inner-frame\"><header><h1>AirBox</h1></header> <main class=\"content\"></main><footer><div><h3>Avem enterprise</h3><a href=\"https://github.com/SteffenHo/AirBox\">GitHub - Airbox</a></div><div class=\"address\"><p>Firma: Avem enterprise</p><p>Street: Am Ring 123</p><p>Place: Ahaus</p><p>Country: Germany</p></div></footer></div><script src=\"main.bundle.js\" type=\"application/javascript\"></script></body></html>";
+
+  response.header.set("Content-Type", "text/html");
+
   strcpy(response.body, text);
   response.statusCode = 200;
     response.end();
