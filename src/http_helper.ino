@@ -113,7 +113,7 @@ const char* http_get_status_message(unsigned int status_code) {
 }
 
 WifiClientHandler* clientHandlers[MAX_CLIENTS] = { NULL };
-void http_helper_loop(HttpRequest &request, HttpResponse &response, void(*callback)(HttpRequest&, HttpResponse&)) {
+void http_helper_loop(void(*callback)(HttpRequest&, HttpResponse&)) {
   WiFiClient newClient = server.available();
   if (newClient) {
     Serial.println("new client");
@@ -176,62 +176,6 @@ void http_helper_loop(HttpRequest &request, HttpResponse &response, void(*callba
       }
     }
   }
-  /*
-  WiFiClient client = server.available();
-
-  if(client) {
-    Serial.print("Client address: ");
-    Serial.println((int) &client);
-  }
-  
-  client = server.available();
-  
-  if(client) {
-    Serial.print("Client address: ");
-    Serial.println((int) &client);
-  }
-
-  if (client) {
-    memset(linebuf, 0, sizeof(linebuf));
-    
-    charcount = 0;
-    response.clear();
-    http_clear_request(request, line_type);
-    
-    while (client.connected()) {
-      if (client.available()) {
-        char c = client.read();
-        linebuf[charcount] = c;
-        charcount++;
-
-        int requestEnded = (line_type > 1 && (request.body.getCurrentIndex() + charcount) >= request.body.content_length);
-        if(requestEnded) {
-          request.bodyReady = true;
-          request.ready = true;
-        }
-
-        if(c == '\n' || requestEnded) {
-          parse_http_request(request, linebuf, line_type);
-
-          if(request.ready) {
-            process_request(request, response);
-          }
-         
-          memset(linebuf, 0, sizeof(linebuf));
-          charcount=0;
-        }
-      }
-
-      callback(request, response);
-
-      if(response.isReady()) {
-        response.send(client);
-        
-        break;
-      }
-    }
-  }
-  */
 }
 
 void process_request(HttpRequest &request, HttpResponse &response) {

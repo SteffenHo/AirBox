@@ -26,8 +26,6 @@ WiFiServer server(SERVER_PORT);
 char linebuf[1024];
 int charcount = 0;
 int line_type = 0;
-HttpRequest request;
-HttpResponse response;
 HttpRouter router;
 
 void setup()
@@ -315,7 +313,7 @@ void client_loop(HttpRequest &request, HttpResponse &response) {
 void loop()
 {
   // listen for incoming clients
-  http_helper_loop(request, response, client_loop);
+  http_helper_loop(client_loop);
 }
 
 #ifdef __DEV__
